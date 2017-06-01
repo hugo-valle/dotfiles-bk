@@ -63,7 +63,7 @@ Remove()
     esac
 
     #links
-    rm -rf ~/.vimrc ~/.bash_aliases  ~/.zshrc ~/.tmux.conf ~/.gitconfig
+    rm -rf ~/.vimrc ~/.bash_aliases ~/.shell_aliases  ~/.zshrc ~/.tmux.conf ~/.gitconfig
     
     #directorys
     rm -rf $VIMDIR $OHMYZSH
@@ -438,7 +438,12 @@ SetMacro( 'LICENSE',      'GNU General Public License' )
 }
 
 
-
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  CreateGitConfig
+#   DESCRIPTION:  Creates basic git configuration file based on input
+#    PARAMETERS:  None
+#       RETURNS:  Success or Error
+#-------------------------------------------------------------------------------
 CreateGitConfig()
 {
     echo "${BOLD}Creating User Git Config:$BLUE $VIMDIR/gitconfig$RESET"
@@ -462,60 +467,38 @@ default = matching
 }
 
 
-
-CreateTmuxAliasZsh()
-{
-    echo "${BOLD}Creating Tmux alaises:$BLUE ~/.oh-my-zsh/lib/alias.zsh$RESET"
-
-    mkkdir -p ~/.oh-my-zsh/lib/
-
-printf "
-#aliases for Tmux
-alias tmux='tmux -2'
-alias ta='tmux attach -t'
-alias tnew='tmux new -s'
-alias tls='tmux ls'
-alias tkill='tmux kill-session -t'
-
-#conveience aliases for editing configs
-alias ev='vim ~/.vimrc'
-alias et='vim ~/.tmux.conf'
-alias ez='vim ~/.zshrc'
-
-#user alias here
-" > ~/.oh-my-zsh/lib/alias.zsh
-
-    echo "${BOLD}Appending Alais file to .zshrc$RESET"
-    echo "source ~/.oh-my-zsh/lib/alias.zsh" >> ~/.zshrc
-}
-
-
-
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  ManageFilesAndLinks
+#   DESCRIPTION:  Create symbolic links to your ~/dotfiles directory
+#    PARAMETERS:  None
+#       RETURNS:  Success or Error
+#-------------------------------------------------------------------------------
 ManageFilesAndLinks()
 {
-
-    if [ "$VIMDIR" != "~/.vim" ]; then    
-        mkdir -p $VIMDIR
-    fi
-
     echo "$RESET${BOLD}Creating Diectory in:$BLUE $VIMDIR$RESET"
     mkdir -p $VIMDIR/colors
-    mkdir -p $VIMDIR/templates
 
-    echo "${BOLD}Creating Symbolic links for .vimrc and .tmuxrcx$RESET"
-    ln -s $DOTFILES/bash/bash_aliases ~/.bash_aliases
+    echo "${BOLD}Creating Symbolic links for .vimrc, bash_alises, and .tmuxrcx$RESET"
+    ln -s $DOTFILES/shell_aliases ~/.bash_aliases
     ln -s $DOTFILES/bash/bashrc ~/.bashrc
-    
+
     ln -s $DOTFILES/tmux/tmux.conf ~/.tmux.conf
     ln -s $DOTFILES/vim/vimrc ~/.vimrc
-    ln -s $DOTFILES/vim/python-mode.template $VIMDIR/templates/python-mode.template
+    ln -s $DOTFILES/templates $VIMDIR/templates
 
     echo "${BOLD}Downloading Colors wombat256mod.vim$RESET"
     wget -O $VIMDIR/colors/wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
 
+    if [ "$ZSH" = true ]; then
+        # Set Zsh
+        echo "${BOLD}Appending Aliases file to ~/.zshrc $RESET"
+        rm ~/.zshrc
+        ln -s $DOTFILES/zsh/zshrc ~/.zshrc
+        echo "source $DOTFILES/shell_aliases" >> ~/.zshrc
+    fi
+
     echo ""
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -555,7 +538,6 @@ main()
     if [ "$ZSH" = true ]; then
         echo "${BOLD}Downloading and installing: oh-my-zsh"
         sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"    
-        CreateTmuxAliasZsh
     fi
 
     vim +PlugInstall +qall #Installs the vim plugin system and updates all plugins

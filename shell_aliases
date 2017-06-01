@@ -9,7 +9,7 @@ alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
 # Tmux alias
-alias tmux='tmux -2'
+#alias tmux='tmux -2'
 alias ta='tmux attach -t'
 alias tnew='tmux new -s'
 alias tls='tmux ls'
@@ -41,4 +41,4 @@ alias zUNIX='ssh -X -Y wsui001@192.86.32.17'
 alias mmf='ssh -X -Y us00139@192.86.32.178'
 alias atlas='ssh -X -Y hvalle@tier3-atlas3.bellarmine.edu'
 alias coeus='ssh -X -Y hvalle@137.190.19.22'
-
+alias pi3='ssh -X -Y hvalle@137.190.179.221'
