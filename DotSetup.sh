@@ -4,12 +4,6 @@
 # Based on vimrc setup from Hugo Valle
 # Modify on May-29-2017 by Hugo V. to fit my setup
 
-#---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  DetectOS
-#   DESCRIPTION:  Set variables detecting the OS type
-#    PARAMETERS:  None
-#       RETURNS:  None
-#-------------------------------------------------------------------------------
 set -o nounset
 clear
 

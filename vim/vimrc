@@ -182,7 +182,7 @@ call plug#begin('~/.vim/bundle')
 "=================================================================
 " NerdTree to see files in tree mode
 "=================================================================
-let g:JV_showEol=1                                "Show EOL marker
+let g:JV_showEol=0                                "Show EOL marker
 Plug 'john-warnes/jvim'
 
 
