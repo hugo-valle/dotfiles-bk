@@ -599,4 +599,17 @@ augroup END
 "c-support
 "call mmtemplates#config#Add ( 'C', '~/.vim/bundle/c-support/c-support/templates/doxygen.templates', 'Doxygen', 'ntd' )
 
-
+"=================================================================
+" Highligth column 80.
+"=================================================================
+if has('g:colors_name')
+    if g:colors_name = "gruvbox"
+        let &colorcolumn=join(range(81,84),",")
+    else
+        set colorcolumn=80
+    endif
+else
+    hi clear Folded
+    hi Folded term=standout cterm=standout gui=standout
+    set colorcolumn=80
+endif
