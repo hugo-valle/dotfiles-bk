@@ -349,8 +349,10 @@ Plug 'ervandew/supertab'
 " TagBar - Requires Exuberant Ctags
 "=================================================================
 " Activate with TagbarOpen or Ctrl-T
+" Jump to tag defenition: Ctrl-]
 Plug 'majutsushi/tagbar'
 nnoremap <C-t> :TagbarToggle<CR>
+nnoremap <silent><C-]> <C-w><C-]><C-w>T
 "map <Leader>y :TagbarToggle<CR>
 let g:tagbar_width = 30
 
