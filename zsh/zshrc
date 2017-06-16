@@ -2,6 +2,12 @@
 export PATH=$HOME/bin:/usr/local/ssl/bin:/usr/local/share:$PATH
 export PATH=/usr/local/sbin:/opt/local/bin:/usr/local/bin:$PATH
 
+#  Python Virtual environments
+VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+export WORKON_HOME=$HOME/.virtualenvs
+export PROJECT_HOME=$HOME/dev
+source /usr/local/bin/virtualenvwrapper.sh
+
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
@@ -104,4 +110,3 @@ setopt interactivecomments
 setopt CORRECT
 # Set TMUX
 export TERM=xterm-256color
-source ~/.shell_aliases
