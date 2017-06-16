@@ -11,57 +11,6 @@ setlocal foldmarker={,}
 setlocal foldmethod=marker
 setlocal foldcolumn=1
 
-"=================================================================
-" Summary of CUSTOM KEYS
-"=================================================================
-"
-" Most plugins use the Map Leader=','
-"
-" ==== Text Search ====
-" <Ctrl + n> Clear current search hilight
-"
-" ==== Fonts (gnome-terminal only) =====
-" <F7> cycle though mono powerline fonts
-" <Ctrl + '+'> to make fontsize bigger
-" <Ctrl + '-'> to make fontsize smaller
-"
-" ==== Theme ====
-" <F5> to switch from dark to light
-" <F6>to cycle the 3 levels of contrast
-"
-" ==== Function Maping ====
-" <Leader>s Do Sort
-" <Crtl + b> Open Tree Browser
-" <Crtl + t> Open Tag Browser
-" <S-r> Cycle opening folded code blocks
-" <S-e> Cycle opening folded code blocks reverse direction
-"
-" ==== Movment using vim standard keys ====
-" <Ctrl + [h,j,k,l]> Move to vim panes and tmux windows (vim-tmux-navigator)
-" <Leader>m Move next tab
-" <Leader>n Move prev tab
-"
-" ==== Movment using arrow keys ====
-"   note: Many window managers intercept arrow key combos
-" <Ctrl + [Left,Right]> to move to next/prev tabs
-" <Ctrl + Shift+ [Left,Right,Up,Down]> to move to windows in same tab
-"
-" ==== Movment using arrow keys ====
-" <F8> Run syntax check on current file
-" <Ctrl + F8> Toggle active syntax checking
-"
-" === Commands ===
-" :TrimFile " Remove all trailing writespace in file
-"
-" <F2> Toggle showing Indent Guides and Pretty Chars
-
-" ==== Notes ====
-"  if has('mac')
-"  if has('nvim')
-" in insert mode Hit Crtl-k then push button to see the vim mapping of the key
-"
-
-
 
 "=================================================================
 " Gnome-Terminal Font Control  Note: Only Gnome-Terminal
@@ -445,6 +394,10 @@ let g:UltiSnipsJumpBackwardTrigger='<C-S-j>'
 "let g:UltiSnipsEditSplit="vertical"
 
 
+"=================================================================
+" Startify: The fancy start screen for vim
+"=================================================================
+Plug 'mhinz/vim-startify'
 
 "=================================================================
 "=####################= END Plugin System =######################=
@@ -615,3 +568,19 @@ else
     hi Folded term=standout cterm=standout gui=standout
     set colorcolumn=80
 endif
+
+
+"=================================================================
+" Startify: The fancy start screen for vim
+" Created by: figlet -f slant "Dr. Valle"
+"=================================================================
+"let g:startify_custom_header = [
+"            \'',
+"            \'        ____            _    __      ____   ',
+"            \'        / __ \_____     | |  / /___ _/ / /__ ',
+"            \'       / / / / ___/     | | / / __ `/ / / _ \',
+"            \'      / /_/ / /  _      | |/ / /_/ / / /  __/',
+"            \'     /_____/_/  (_)     |___/\__,_/_/_/\___/ ',
+"            \'',
+"            \'',
+"            \]
