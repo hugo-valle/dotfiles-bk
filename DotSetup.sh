@@ -4,15 +4,27 @@
 # Based on vimrc setup from Hugo Valle
 # Modify on May-29-2017 by Hugo V. to fit my setup
 
+#!/bin/bash
+#set -euo pipefail
+#IFS=$'\n\t'
+
 set -o nounset
+
 clear
+
+#
+#    MAC OS fix bash completion
+#
+#   brew install bash-completion
+#   brew install git
+#   brew link git
+#
 
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  DetectOS
-#   DESCRIPTION:  Detecs Operating System. Sets variables
-#                 for installation purpuses.
+#   DESCRIPTION:  Set variables detecting the OS type
 #    PARAMETERS:  None
-#       RETURNS:  Error or Success
+#       RETURNS:  None
 #-------------------------------------------------------------------------------
 DetectOS()
 {
@@ -32,8 +44,8 @@ DetectOS()
     if [[  $OS == 'LINUX' ]]; then
         if [[  $SUPPORTEDDISTROS != *$ID* ]]; then
             echo "$BOLD${RED}ERROR:$RESET Undetect Linux: $ID $RESET"
-            echo "Supported:$BOLD$BLUE $SUPPORTEDDIRSTROS $RESET"
-            read -n 1 -p "Atempt to install? $RESET (y/N): $GREEN" choice
+            echo "Supported:$BOLD$BLUE $SUPPORTEDDISTROS $RESET"
+            read -n 1 -p "Attempt to continue? $RESET (y/N): $GREEN" choice
             echo "$RESET"
             case "$choice" in
                 y|Y ) :;;
@@ -43,7 +55,7 @@ DetectOS()
             if [[  -z "$PRETTY_NAME" ]]; then
                 echo "Linux Detected:$BOLD$GREEN $ID $RESET"
             else
-                echo "Lunix Detected:$BOLD$GREEN $PRETTY_NAME $RESET"
+                echo "Linux Detected:$BOLD$GREEN $PRETTY_NAME $RESET"
             fi
         fi
 
@@ -77,28 +89,26 @@ DetectOS()
 #       RETURNS:  None
 #-------------------------------------------------------------------------------
 ScriptSettings()
-        {
+{
     SCRIPTNAME="WSU JCustom VIM IDE"
 
     #Directory Setup
     DOTFILES=$HOME/dotfiles
     LOCALBIN=~/.local/bin
-    ENV_FILES=($HOME/.profile $HOME/.bash_profile $HOME/.bashrc $HOME/.zshrc $HOME/.bash_login)
+    ENV_FILES=($HOME/.bash_profile $HOME/.bash_login $HOME/.profile $HOME/.bashrc $HOME/.zshrc)
 
     #Optional
     OPTPKGS='vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags'
     PIPPKGS='vim-vint proselint sphinx virtualenvwrapper'
 
     if [[  $OS == 'LINUX' ]]; then  #LINUX
-        PKGS='git vim python3 curl'
+        PKGS='git vim python3 curl bc'
     elif [[  $OS == 'OSX' ]]; then  #OSX
-        PKGS='git vim python3 curl'
+        PKGS='git vim python3 curl bc'
     fi
 
-    FILES=($DOTFILES/vim/vimrc $DOTFILES/vim $DOTFILES/shell/shell_aliases $DOTFILES/shell/shell_aliases \
-        $DOTFILES/tmux/tmux.conf $DOTFILES/vim/vimrc $DOTFILES/git/gitconfig)
-    LINKS=(           ~/.vimrc        ~/.vim               ~/.bash_aliases               ~/.zsh_aliases \
-                    ~/.tmux.conf             ~/.vimrc            ~/.gitconfig)
+    FILES=($DOTFILES/vim/vimrc $DOTFILES/vim $DOTFILES/tmux/tmux.conf $DOTFILES/git/gitconfig $DOTFILES/zsh/zshrc)
+    LINKS=( ~/.vimrc           ~/.vim        ~/.tmux.conf             ~/.gitconfig            ~/.zshrc)
 
     #Global Vars (Auto Set - Changing will have BAD effects)
     ADMIN=0
@@ -174,7 +184,9 @@ Remove()
 #-------------------------------------------------------------------------------
 Upgrade()
 {
-    vim +PlugClean +PlugInstall +PlugUpdate +qall
+    unlink ~/.bash_aliases
+    unlink ~/.zsh_aliases
+    vim +PlugInstall +PlugUpdate +PlugClean +qall
     exit 0
 }
 
@@ -188,13 +200,15 @@ Upgrade()
 #-------------------------------------------------------------------------------
 DecryptSecure()
 {
-    read -n 1 -p "$BOLD${BLUE}Decrypt Secure File$RESET (You probably want to say$BOLD NO$RESET) (y/N): $GREEN" DECRYPT
+    read -n 1 -p "$BOLD${BLUE}Use secure valut?$RESET (You must have a git repository setup) (y/N): $GREEN" choice
     echo "$RESET"
-    case "$DECRYPT" in
+    case "$choice" in
         y|Y ) :;;
         n|N|* ) return;;
     esac
-    echo ""
+    read -p "${RESET}Enter$BOLD$BLUE git repository of secure vault$RESET ex\"https://github.com/<user name>/secure.git\": $GREEN" REPO
+
+    (cd $DOTFILES && exec git clone $REPO)
     (exec $DOTFILES/scripts/unlock.sh)
     exit 0
 }
@@ -211,20 +225,20 @@ Init()
 {
     #Check if running as sudo
     # TODO look into sudo -H
-    if [[  "$EUID" == 0 ]]
+    if [[  $EUID == 0 ]]
     then
         echo "Do ${RED}NOT$RESET run this script as root or with sudo$RESET"
         PrintHelp
     fi
 
     #Check and process command line arguments
-    while [[  "$#" > 0 ]]; do
+    while [[  $# > 0 ]]; do
         case $1 in
             --administrator) ADMIN=1;;
             --remove) Remove;;
             --upgrade) Upgrade;;
             --decrypt) DecryptSecure;;
-            -h | --help | *) PrintHelp;;
+            -h|--help|*) PrintHelp;;
         esac;
         shift;
     done
@@ -529,9 +543,11 @@ CreateGitConfig()
     editor = vim
     autocrlf= input
 [diff]
-    external = git_diff_wrapper.sh
-[pager]
-    diff =
+    tool = vimdiff
+[difftool]
+    prompt = false
+[merge]
+    tool = vimdiff
 [help]
     autocorrect = 1
 [color]
@@ -542,6 +558,8 @@ CreateGitConfig()
     status = auto
 [push]
     default = matching
+[credential]
+    helper = cache --timeout=28800
 [alias]
     export = archive -o latest.tar.gz -9 --prefix=latest/
     amend = !git log -n 1 --pretty=tformat:%%s%%n%%n%%b | git commit -F - --amend
@@ -574,10 +592,10 @@ ManageFilesAndLinks()
     mkdir -p $DOTFILES/vim/colors
     wget -O $DOTFILES/vim/colors/wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
 
-    if [[  -f ~/.zshrc && $ZSH == true ]]; then
-        echo "Appending soruces to$BOLD$GREEN ~/.zshrc$RESET"
-        echo "source ~/.zsh_aliases" >> ~/.zshrc
-    fi
+    #if [[  -f ~/.zshrc && $ZSH == true ]]; then
+    #    echo "Appending soruces to$BOLD$GREEN ~/.zshrc$RESET"
+    #    echo "source ~/.zsh_aliases" >> ~/.zshrc
+    #fi
 
     echo ""
 }
@@ -635,10 +653,11 @@ AddToEnvironment()
         RCFILE="~/.bash_profile"
         echo "Adding to file:$BOLD$GREEN $RCFILE$RESET"
         echo "export DOTFILES=\"$DOTFILES\"" >> $RCFILE
-        echo 'export PATH="$PATH:$DOTFILES/scripts"' >> $RCFILE
-        echo 'source $DOTFILES/scripts/autorun.sh"' >> $RCFILE
+        echo "export PATH=\"\$PATH:$DOTFILES/scripts\"" >> $RCFILE
+        echo "source $DOTFILES/shell/autorun.sh" >> $RCFILE
     fi
-    #Also export then for any supscript of this install script
+
+    #Also export then for any subscript this script runs
     export DOTFILES="$DOTFILES"
     export PATH="$PATH:$DOTFILES/scripts"
     echo ""
@@ -693,8 +712,13 @@ main()
     PatchPlugs
     DecryptSecure
 
-    echo ""
-    echo "$BOLD$BLUE$SCRIPTNAME$RESET Complete: Enjoy a better$BOLD vim$RESET experience.$RESET"
-    echo ""
+    echo '      _       _                 _     _         '
+    echo '     (_)_   _(_)_ __ ___       (_) __| | ___    '
+    echo '     | \ \ / / | `_ ` _ \ _____| |/ _` |/ _ \   '
+    echo '     | |\ V /| | | | | | |_____| | (_| |  __/   '
+    echo '    _/ | \_/ |_|_| |_| |_|     |_|\__,_|\___|   '
+    echo '   |__/                    ${BOLD}Enjoy a better vim$RESET   '
+    echo ''
+
 }
 main "$@"     #remember to pass all command line args
