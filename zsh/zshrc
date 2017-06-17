@@ -3,7 +3,14 @@ export PATH=$HOME/bin:/usr/local/ssl/bin:/usr/local/share:$PATH
 export PATH=/usr/local/sbin:/opt/local/bin:/usr/local/bin:$PATH
 
 #  Python Virtual environments
-VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+case `uname` in
+    Darwin)
+        VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python
+        ;;
+    *)
+        VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+        ;;
+esac
 export WORKON_HOME=$HOME/.virtualenvs
 export PROJECT_HOME=$HOME/dev
 source /usr/local/bin/virtualenvwrapper.sh
