@@ -6,10 +6,12 @@
 "
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
 " Local file settings
+set encoding=utf-8
 scriptencoding utf-8
 setlocal foldmarker={,}
 setlocal foldmethod=marker
 setlocal foldcolumn=1
+setlocal keywordprg=:help
 
 
 "=================================================================
@@ -71,44 +73,35 @@ endif
 "=================================================================
 " Vim Color Support and Force
 "=================================================================
-if exists('$TMUX')
-    if $COLORTERM ==? 'truecolor'
+if ($COLORTERM ==? 'truecolor')
+    if has('termguicolors')
+        set termguicolors
+    endif
+    if exists('$TMUX')
         let g:gruvbox_italic=0
-        " Disable Background Color Erase (BCE) so that color schemes
-        " work properly when Vim is used inside tmux and GNU screen
-        " and turecolor terminal like gnome-terminal
         set t_ut=
     else
-        set t_Co=256
-        " Disable Background Color Erase (BCE) so that color schemes
-        " work properly when Vim is used inside tmux and GNU screen
-        " and turecolor terminal like gnome-terminal
+        let g:gruvbox_italic=1
         set t_ut=
     endif
 else
-    if $COLORTERM ==? 'truecolor'
-        if has('termguicolors')
-            set termguicolors
-            let g:gruvbox_italic=1
-            " Disable Background Color Erase (BCE) so that color schemes
-            " work properly when Vim is used inside tmux and GNU screen
-            " and turecolor terminal like gnome-terminal
-            set t_ut=
-        endif
-    else
-        " No truecolor welcome to bad times
-        " Hope term supports 256 colors
-        set term=xterm-256color
-        set t_Co=256
-        set t_ut=
-    endif
+    " No truecolor welcome to bad times
+    " Hope term supports 256 colors
+    let g:gruvbox_italic=0
+    set term=xterm-256color
+    set t_Co=256
+    set t_ut=
 endif
 
 if $TERM ==? 'linux'
-    " If Term is linux then we are in a 9 color envermonet
+    " If Term is linux then we are in a 9 color environment
+    let g:gruvbox_italic=0
     set t_Co=8
 endif
 
+if has('mac')
+    let g:gruvbox_italic=0
+endif
 
 
 "=================================================================
@@ -127,11 +120,11 @@ let g:mapleader = ','
 call plug#begin('~/.vim/bundle')
 
 
-
 "=================================================================
 " NerdTree to see files in tree mode
 "=================================================================
-let g:JV_showEol=0                                "Show EOL marker
+let g:JV_showEol=1       " Show EOL marker
+let g:JV_codePretty = 1  " Show indent guides when
 Plug 'john-warnes/jvim'
 
 
@@ -154,7 +147,7 @@ let g:NERDTreeMapOpenInTab='<ENTER>'  " Open file in newtab
 "=================================================================
 "Show git file status when browsing
 Plug 'Xuyuanp/nerdtree-git-plugin'
-            let g:NERDTreeIndicatorMapCustom = {
+let g:NERDTreeIndicatorMapCustom = {
             \ 'Modified'  : '✹',
             \ 'Staged'    : '✚',
             \ 'Untracked' : '✭',
@@ -175,36 +168,35 @@ Plug 'Xuyuanp/nerdtree-git-plugin'
 "=================================================================
 if has('job') && has ('timers')
 
+    Plug 'w0rp/ale'
     set noshowmode
     let g:airline#extensions#ale#enabled = 1
-    Plug 'w0rp/ale'
-    let g:ale_sign_column_always = 1
+"    let g:ale_sign_column_always = 1
     let g:ale_sign_error = '>>'
     let g:ale_sign_warning = '--'
-
 "    let g:ale_c_cppcheck_options = '--enable=style' " --suppress=memleak:src/file1.cpp src/
     let g:ale_history_log_output=1  " use ALEInfo to see the full output if needed
 
     " Write this in your vimrc file
     "let g:ale_set_loclist = 1
-    "let g:ale_set_quickfix = 1
-    "let g:ale_open_list = 1
+    let g:ale_set_quickfix = 1
+    let g:ale_open_list = 1
     " Set this if you want to.
     " This can be useful if you are combining ALE with
     " some other plugin which sets quickfix errors, etc.
     "let g:ale_keep_list_window_open = 0
 
 else
-"=================================================================
-" Syntastic Syntax checking Plugin
-"=================================================================
+    "=================================================================
+    " Syntastic Syntax checking Plugin
+    "=================================================================
     " Use :Erorrs to open location-list :lclose
     " :lnext and :lprevious
     Plug 'vim-syntastic/syntastic'
-    set statusline+=%#warningmsg#
-    set statusline+=%{SyntasticStatuslineFlag()}
-    set statusline+=%*
-    "
+    "set statusline+=%#warningmsg#
+    "set statusline+=%{SyntasticStatuslineFlag()}
+    "set statusline+=%*
+
     let g:syntastic_always_populate_loc_list = 1
     let g:syntastic_auto_loc_list = 1
     let g:syntastic_check_on_open = 1
@@ -224,16 +216,17 @@ augroup end
 
 
 "=================================================================
-" Airline Status Line
+" Airline Status Line and TmuxLine 
 "=================================================================
+let g:airline#extensions#tagbar#enabled = 0 "tagbar plugin is slow disable it
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'   "Lots of themes
 set laststatus=2
 let g:airline_powerline_fonts = 1
-let g:airline_section_c = '%F'
-"let g:airline_theme='base16'
-"let g:airline_theme='murmur'
-"let g:airline_theme='powerlineish'
+let g:airline_section_c = '%F'              " Show full Path if possable
+"let g:airline_theme='base16'               " Pick a theme
+let g:airline_theme='murmur'                " or
+"let g:airline_theme='powerlineish'         " or
 let g:airline#extensions#tmuxline#enabled = 1
 let g:airline#extensions#tmuxline#color_template = 'insert'
 Plug 'edkolev/tmuxline.vim'     "have airline theme the tmux bar
@@ -249,30 +242,35 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
 
 
+"=================================================================
+" Latex Support
+"=================================================================
+Plug 'xuhdev/vim-latex-live-preview'
+let g:livepreview_previewer = 'open -a Preview'
 
 "=================================================================
 " Language Support
 "=================================================================
 let g:C_CreateMenusDelayed = 'yes'
-Plug 'WolfgangMehner/c-support'
-let g:C_UseToolbox = 'yes'
-let g:C_UseTool_doxygen = 'yes'
-let g:C_UseTool_cmake = 'yes'
-
 let g:C_MapLeader  = ','
-Plug 'WolfgangMehner/bash-support'
-let g:Bash_MapLeader  = ','
-Plug 'WolfgangMehner/latex-support'
-let g:Latex_MapLeader  = ','
-Plug 'WolfgangMehner/lua-support'
-let g:Lua_MapLeader  = ','
-Plug 'WolfgangMehner/perl-support'
-let g:Perl_MapLeader  = ','
-Plug 'WolfgangMehner/vim-support'
-let g:Vim_MapLeader  = ','
-Plug 'WolfgangMehner/python-support'
-let g:Python_MapLeader  = ','
-
+Plug 'WolfgangMehner/c-support'
+"let g:C_UseToolbox = 'yes'
+"let g:C_UseTool_doxygen = 'yes'
+"let g:C_UseTool_cmake = 'yes'
+"
+"let g:C_MapLeader  = ','
+"Plug 'WolfgangMehner/bash-support'
+"let g:Bash_MapLeader  = ','
+"Plug 'WolfgangMehner/latex-support'
+"let g:Latex_MapLeader  = ','
+"Plug 'WolfgangMehner/lua-support'
+"let g:Lua_MapLeader  = ','
+"Plug 'WolfgangMehner/perl-support'
+"let g:Perl_MapLeader  = ','
+"Plug 'WolfgangMehner/vim-support'
+"let g:Vim_MapLeader  = ','
+"Plug 'WolfgangMehner/python-support'
+"let g:Python_MapLeader  = ','
 
 
 "=================================================================
@@ -380,16 +378,18 @@ Plug 'christoomey/vim-tmux-navigator'
 
 
 "=================================================================
-" Code Snippits
+" Code Snippets
 "=================================================================
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger='<tab>'
+let g:UltiSnipsJumpForwardTrigger='<Nul>'
+let g:UltiSnipsJumpBackwardTrigger='<C-S-d>'
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit='vertical'
 " Track the engine.
 Plug 'SirVer/ultisnips'
 " Snippets are separated from the engine. Add this if you want them:
 Plug 'honza/vim-snippets'
-" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger='<tab>'
-let g:UltiSnipsJumpForwardTrigger='<C-j>'
-let g:UltiSnipsJumpBackwardTrigger='<C-S-j>'
 " If you want :UltiSnipsEdit to split your window.
 "let g:UltiSnipsEditSplit="vertical"
 
@@ -397,6 +397,15 @@ let g:UltiSnipsJumpBackwardTrigger='<C-S-j>'
 "=================================================================
 " Startify: The fancy start screen for vim
 "=================================================================
+" :SLoad    load a session
+" :SSave    save a session
+" :SDelete  delete a session
+" :SClose   close current session
+"
+
+let g:startify_fortune_use_unicode = 1
+let g:startify_session_persistence = 0
+let g:startify_bookmarks = [ {'c': '~/.vimrc'} ]
 Plug 'mhinz/vim-startify'
 
 "=================================================================
@@ -471,7 +480,7 @@ augroup END
 set backspace=indent,eol,start " Allow backspace over listed types
 set nostartofline           " Stay on current char on page commands
 set visualbell              " Don't beep, flash the screen instead
-set scrolloff=3             " Use a 1 line (horizontal) scroll offset
+set scrolloff=1             " Use a 1 line (horizontal) scroll offset
 set sidescrolloff=5         " Use a 5 Char (virtual) scroll offset
 set virtualedit=onemore
 set termencoding=utf-8
@@ -489,18 +498,21 @@ vnoremap <Leader>s :sort<CR>
 set ruler                   " Show the line / column number of cursor
 set showcmd                 " Show the partially completed command
 set number                  " Display line number"
-set textwidth=79                   " width of document (used by gd)
+set textwidth=79            " width of document (used by gd)
 set nowrap                  " don't automatically wrap on load
-set formatoptions-=t                   " don't automatically wrap text when typing
+set formatoptions-=t        " don't automatically wrap text when typing
 
 
 
 "=================================================================
 " Search
 "=================================================================
-set ignorecase             " Ignore case in search patterns
+"set ignorecase             " Ignore case in search patterns
+set infercase              " Don't ignore case in auto completion
+                           "  but do Ignore it in search patterns
 set smartcase              " Don't ignore case if pattern contains it
 set incsearch              " Show the 'best match so far'
+set wrapscan               " Search will wrap around the file
 set hlsearch               " Highlight all matches
 
 
@@ -510,7 +522,7 @@ set hlsearch               " Highlight all matches
 "=================================================================
 set autoindent                 " Keep indent level on new line
 set nosmartindent              " Intelligent indenting for source code
-"set cindent                   " Intelligent indenting for source code
+set cindent                    " Intelligent indenting for source code
 set cinkeys=0{,0},!^F,o,O,e    " default is: 0{,0},0),:,0#,!^F,o,O,e
 set showmatch                  " Show matching brackets / parenthesis
 set matchtime=5                " Show matching character for .3s
