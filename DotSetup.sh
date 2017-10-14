@@ -4,6 +4,12 @@
 # Based on vimrc setup from Hugo Valle
 # Modify on May-29-2017 by Hugo V. to fit my setup
 
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  DetectOS
+#   DESCRIPTION:  Set variables detecting the OS type
+#    PARAMETERS:  None
+#       RETURNS:  None
+#-------------------------------------------------------------------------------
 #!/bin/bash
 #set -euo pipefail
 #IFS=$'\n\t'
@@ -20,12 +26,6 @@ clear
 #   brew link git
 #
 
-#---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  DetectOS
-#   DESCRIPTION:  Set variables detecting the OS type
-#    PARAMETERS:  None
-#       RETURNS:  None
-#-------------------------------------------------------------------------------
 DetectOS()
 {
     # IDs help ---> https://github.com/zyga/os-release-zoo
@@ -98,7 +98,7 @@ ScriptSettings()
     ENV_FILES=($HOME/.bash_profile $HOME/.bash_login $HOME/.profile $HOME/.bashrc $HOME/.zshrc)
 
     #Optional
-    OPTPKGS='vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags'
+    OPTPKGS='vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman'
     PIPPKGS='vim-vint proselint sphinx virtualenvwrapper'
 
     if [[  $OS == 'LINUX' ]]; then  #LINUX
@@ -107,8 +107,8 @@ ScriptSettings()
         PKGS='git vim python3 curl bc'
     fi
 
-    FILES=($DOTFILES/vim/vimrc $DOTFILES/vim $DOTFILES/tmux/tmux.conf $DOTFILES/git/gitconfig $DOTFILES/zsh/zshrc)
-    LINKS=( ~/.vimrc           ~/.vim        ~/.tmux.conf             ~/.gitconfig            ~/.zshrc)
+    FILES=($DOTFILES/vim/vimrc $DOTFILES/vim $DOTFILES/tmux/tmux.conf $DOTFILES/vim/vimrc $DOTFILES/git/gitconfig)
+    LINKS=(           ~/.vimrc        ~/.vim ~/.tmux.conf             ~/.vimrc            ~/.gitconfig)
 
     #Global Vars (Auto Set - Changing will have BAD effects)
     ADMIN=0
@@ -638,10 +638,6 @@ AddToEnvironment()
                 echo "export DOTFILES=\"$DOTFILES\"" >> $RCFILE
                 echo "export PATH=\"\$PATH:$DOTFILES/scripts\"" >> $RCFILE
                 echo "source $DOTFILES/shell/autorun.sh" >> $RCFILE
-                #Also export then for any supscript of this install script
-
-                export DOTFILES="$DOTFILES"
-                export PATH="$PATH:$DOTFILES/scripts"
             fi
         else
            echo "$YELLOW${BOLD}Note:$RESET$BOLD $RCFILE$RESET does not exist"
@@ -688,6 +684,7 @@ main()
     GetUserInfo   # Get user information
 
     ManageFilesAndLinks   #Create Dirs Copy Files and Make Links
+
     AddToEnvironment
 
     #Install Powerline Fonts?
@@ -702,15 +699,16 @@ main()
     CreatePersonalTemplate
     CreateGitConfig
 
-    if [[ "$ZSH" == true ]]; then
-        echo "Downloading and installing: oh-my-zsh"
-        sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-    fi
-
     vim +PlugInstall +qall #Installs the vim plugin system and updates all plugins
 
     PatchPlugs
     DecryptSecure
+
+    if [[ "$ZSH" == true ]]; then
+        echo "Downloading and installing: oh-my-zsh"
+        sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+        AddToEnvironment
+    fi
 
     echo '      _       _                 _     _         '
     echo '     (_)_   _(_)_ __ ___       (_) __| | ___    '

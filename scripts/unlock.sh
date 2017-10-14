@@ -24,8 +24,18 @@ if [[ -f "$SCRIPTS/colors.sh" ]]; then
     source $SCRIPTS/colors.sh
 fi
 
+if ! [[ -d $SECURE ]]; then
+    echo "$BOLD${RED}Error:$RESET$BOLD No secure directory detected: run './Dotfiles --decrypt' $RESET"
+    exit 0
+else
+    (cd $SECURE && git reset --hard)
+    (cd $SECURE && git pull --all)
+fi
+
+
+
 if ! [[ -f $SECURE/secure.tar.xz.gpg ]]; then
-    echo "$BOLD${YELLOW}Note:$RESET$BOLD Nothing to unlock as no secure file found$RESET"
+    echo "$BOLD${RED}Error:$RESET$BOLD Nothing to unlock as no secure file found$RESET"
     exit 0
 fi
 
@@ -37,7 +47,7 @@ fi
 echo "$BOLD${BLUE}Unencrypting$RESET$BOLD tar.xz$RESET"
 if [[ $# == 1 ]]; then
     # (cd "$SECURE" && exec gpg --passphrase-file <(echo $1) --yes --batch --output secure.tar.xz secure.tar.xz.gpg)
-    (cd $SECURE && exec gpg --passphrase-file <(echo $1) --output secure.tar.xz -d secure.tar.xz.gpg)
+    (cd $SECURE && exec gpg --passphrase-file <(echo $1) secure.tar.xz.gpg)
 else
     (cd $SECURE && exec gpg secure.tar.xz.gpg)
 fi
