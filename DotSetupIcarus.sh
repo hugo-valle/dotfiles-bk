@@ -305,6 +305,17 @@ ManageFilesAndLinks()
 }
 
 
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  CS2250
+#   DESCRIPTION:  Updates the configuration to the one needed for cs2250 class
+#    PARAMETERS:  
+#       RETURNS:  Success or Error
+#-------------------------------------------------------------------------------
+CS2250()
+{
+    cp /home/hvalle/public_html/cs2250/vimrc ~/.vimrc
+    cp /home/hvalle/public_html/cs2250/c.comments.template ~/.vim/bundle/c-support/c-support/templates/
+}
 
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  main
@@ -326,6 +337,8 @@ main()
     CreateGitConfig
 
     vim +PlugInstall +qall #Installs the vim plugin system and updates all plugins
+    # Get CS2250 files
+    CS2250
 
     echo ""
     echo "$BOLD${GREEN} $SCRIPTNAME $RESET$BOLD DONE: Enjoy a better$BLUE vim$RESET$BOLD experince.$RESET"
