@@ -275,7 +275,6 @@ ui = auto
 default = matching
 " "$name" "$email" > $DOTFILES/git/gitconfig 
     echo "${BOLD}Creating Sympolic link to gitconfig$RESET"
-    ln -s $DOTFILES/git/gitconfig ~/.gitconfig
 }
 
 
@@ -300,6 +299,8 @@ ManageFilesAndLinks()
 
     echo "${BOLD}Downloading Colors wombat256mod.vim$RESET"
     wget -O $VIMDIR/colors/wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
+    
+    ln -s $DOTFILES/git/gitconfig ~/.gitconfig
 
     echo ""
 }
@@ -331,10 +332,9 @@ main()
 
     GetUserInfo   # Get user information
 
-    ManageFilesAndLinks   #Create Dirs Copy Files and Make Links
-
-    CreatePersonalTemplate
     CreateGitConfig
+    ManageFilesAndLinks   #Create Dirs Copy Files and Make Links
+    CreatePersonalTemplate
 
     vim +PlugInstall +qall #Installs the vim plugin system and updates all plugins
     # Get CS2250 files
