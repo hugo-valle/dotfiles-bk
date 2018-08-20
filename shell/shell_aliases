@@ -20,7 +20,6 @@ elif [[ $OS == 'OSX' ]]; then
     alias grep='grep --color=auto'
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
-
 fi
 
 # Tmux alias
@@ -35,7 +34,13 @@ alias ev='vim ~/.vimrc'
 alias et='vim ~/.tmux.conf'
 alias ez='vim ~/.zshrc'
 alias vim='vim -p'
+alias nvim='nvim -p'
 alias vimno='vim -u NONE'
+alias nvimno='nvim -u NONE'
+
+
+alias jvim='vim -p ~/.vimrc ~/.vim/bundle/jvim/plugin/jvim.vim'
+alias jnvim='nvim -p ~/.vimrc ~/.vim/bundle/jvim/plugin/jvim.vim'
 
 #Colorize GCC output
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
@@ -44,4 +49,4 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 alias gits='git status'
 alias gita='git add'
 
-printf "[Shell Aliases Loaded] "
+printf "${RESET}${GREEN}Shell Aliases$RESET|"
