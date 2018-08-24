@@ -1,4 +1,4 @@
-# john-warnes/dotfiles.git
+# hugo-valle/dotfiles.git
 
 Install Script for Advanced dotfiles and vim setup.
 
