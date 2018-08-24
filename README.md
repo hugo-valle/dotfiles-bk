@@ -39,7 +39,7 @@ Need more contrast for theme? Try `<F6>`
 ## Instillation
 1. Clone into `$HOME` folder  
 ```
-~/git clone https://github.com/john-warnes/dotfiles.git
+~/git clone https://github.com/hugo-valle/dotfiles.git
 ```
 2. Change into dotfiles folder  
 ```
