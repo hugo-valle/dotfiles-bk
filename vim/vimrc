@@ -3,7 +3,7 @@
 "=================================================================
 " vim:foldmarker={,}:foldmethod=marker:
 "=================================================================
-"  Revision  939
+"  Revision  943
 "  Modified  Monday, 27 August 2018
 "=================================================================
 set encoding=utf-8
@@ -366,6 +366,7 @@ let g:tagbar_width = 30
 "=================================================================
 " gruvbox Color Scheme {
 "=================================================================
+Plug 'morhetz/gruvbox'
 " <F5> to switch from dark to light
 " <F6> to cycle the 3 levels of contrast
 nnoremap <silent> <F5> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
@@ -392,8 +393,8 @@ function! GruvCycleContrast()
 endfunction
 
 set background=dark            " Start with dark background theme
-silent! colorscheme gruvbox    " Color scheme supports truecolor
-"colorscheme default           " this is the default vim scheme
+silent! colorscheme2yy gruvbox    " Color scheme supports truecolor
+colorscheme default           " this is the default vim scheme
 "} ===
 
 "=================================================================
@@ -532,7 +533,7 @@ set backspace=indent,eol,start " Allow backspace over listed types
 set nostartofline              " Stay on current char on page commands
 set visualbell                 " Don't beep, flash the screen instead
 set scrolloff=1                " Use a 1 line (horizontal) scroll offset
-set sidescrolloff=10           " Use a 5 column (virtual) scroll offset
+set sidescrolloff=5            " Use a 5 column (virtual) scroll offset
 set virtualedit=onemore        " Allow you to move the cursor to the newline
 set termencoding=utf-8         " Lets try using Unicode
 set wildmenu
