@@ -3,8 +3,8 @@
 "=================================================================
 " vim:foldmarker={,}:foldmethod=marker:
 "=================================================================
-"  Revision  943
-"  Modified  Monday, 27 August 2018
+"  Revision  944
+"  Modified  Thursday, 14 February 2019
 "=================================================================
 set encoding=utf-8
 scriptencoding utf-8
@@ -310,7 +310,7 @@ Plug 'python-mode/python-mode'
 "Template
 augroup Python
     autocmd!
-    autocmd BufNewFile *.py silent! 0r ~/.vim/templates/python-mode.template | cal cursor(8,4)
+    autocmd BufNewFile *.py silent! 0r ~/.vim/templates/python_mode.template | cal cursor(8,4)
 augroup END
 
 
