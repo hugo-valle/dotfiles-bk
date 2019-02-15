@@ -13,4 +13,10 @@ fi
 # Customize to your needs...
 export DOTFILES="/home/hvalle/dotfiles"
 export PATH="$PATH:/home/hvalle/dotfiles/scripts"
+# local libs
+export PATH=$PATH:~/usr/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/usr/lib
+export C_INCLUDE_PATH=$C_INCLUDE_PATH:~/usr/include
+export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:~/usr/include
+
 source /home/hvalle/dotfiles/shell/autorun.sh
