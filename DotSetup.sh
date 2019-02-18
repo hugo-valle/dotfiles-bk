@@ -704,11 +704,11 @@ main()
     PatchPlugs
     DecryptSecure
 
-    if [[ "$ZSH" == true ]]; then
-        echo "Downloading and installing: oh-my-zsh"
-        sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-        AddToEnvironment
-    fi
+#    if [[ "$ZSH" == true ]]; then
+#        echo "Downloading and installing: oh-my-zsh"
+#        sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+#        AddToEnvironment
+#    fi
 
     echo '      _       _                 _     _         '
     echo '     (_)_   _(_)_ __ ___       (_) __| | ___    '
