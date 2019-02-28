@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Written by John Warnes
-# Based on vimrc setup from Hugo Valle
-# Modify on May-29-2017 by Hugo V. to fit my setup
+set -o nounset
+clear
+
 
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  DetectOS
@@ -10,22 +10,7 @@
 #    PARAMETERS:  None
 #       RETURNS:  None
 #-------------------------------------------------------------------------------
-#!/bin/bash
-#set -euo pipefail
-#IFS=$'\n\t'
-
-set -o nounset
-
-clear
-
 #
-#    MAC OS fix bash completion
-#
-#   brew install bash-completion
-#   brew install git
-#   brew link git
-#
-
 DetectOS()
 {
     # IDs help ---> https://github.com/zyga/os-release-zoo
@@ -38,6 +23,7 @@ DetectOS()
         linux*)   OS="LINUX" ;;
         bsd*)     OS="BSD" ;;
         msys*)    OS="WINDOWS" ;;
+        *cygwin*)    OS="WINDOWS" ;;
         *)        OS="unknown: $OSTYPE" ;;
     esac
 
@@ -69,6 +55,17 @@ DetectOS()
             echo "$BOLD${YELLOW}Note:$RESET OSX:$BOLD$BLUE HomeBrew (https://brew.sh/)$RESET is required for auto install."
             echo "$BOLD${YELLOW}Note:$RESET Missing Packages will be listed."
         fi
+
+    elif [[  "$OS" == "WINDOWS" ]]; then
+        echo "Windows Detected $RESET"
+        if which pact 2> /dev/null; then
+            echo "$BOLD${YELLOW}Note!$RESET Missing Packages will installed using babun"
+            PACT=1;
+        else
+            PACT=0
+            echo "$BOLD${YELLOW}Note:$RESET WINDOWS:$BOLD$BLUE HomeBrew (https://babun.github.io/)$RESET is required for auto install."
+            echo "$BOLD${YELLOW}Note:$RESET Missing Packages will be listed."
+        fi
     fi
 
 
@@ -76,10 +73,10 @@ DetectOS()
         APTCMD='sudo apt-get -o Dpkg::Progress-Fancy="1" -y install'
     elif [[ $OS == 'OSX' ]]; then
         APTCMD='brew install'
+    elif [[ $OS == 'WINDOWS' ]]; then
+        APTCMD='pact install'
     fi
-
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -90,25 +87,32 @@ DetectOS()
 #-------------------------------------------------------------------------------
 ScriptSettings()
 {
-    SCRIPTNAME="WSU JCustom VIM IDE"
+    SCRIPTNAME="WSU Dr. V VIM IDE"
 
     #Directory Setup
     DOTFILES=$HOME/dotfiles
     LOCALBIN=~/.local/bin
-    ENV_FILES=($HOME/.bash_profile $HOME/.bash_login $HOME/.profile $HOME/.bashrc $HOME/.zshrc)
+    ENV_FILES=($HOME/.bash_profile 
+                $HOME/.bash_login 
+                $HOME/.profile 
+                $HOME/.bashrc)
 
     #Optional
-    OPTPKGS='vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman'
-    PIPPKGS='vim-vint proselint sphinx virtualenvwrapper'
+    OPTPKGS='zsh vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman'
+    PIPPKGS='vim-vint proselint sphinx virtualenvwrapper numpy pandas'
+    PKGS='git vim python3 curl bc'
 
-    if [[  $OS == 'LINUX' ]]; then  #LINUX
-        PKGS='git vim python3 curl bc'
-    elif [[  $OS == 'OSX' ]]; then  #OSX
-        PKGS='git vim python3 curl bc'
-    fi
-
-    FILES=($DOTFILES/vim/vimrc $DOTFILES/vim $DOTFILES/tmux/tmux.conf $DOTFILES/vim/vimrc $DOTFILES/git/gitconfig)
-    LINKS=(           ~/.vimrc        ~/.vim ~/.tmux.conf             ~/.vimrc            ~/.gitconfig)
+    # Note these two arrays must match by index number
+    FILES=($DOTFILES/vim/vimrc 
+            $DOTFILES/vim 
+            $DOTFILES/tmux/tmux.conf 
+            $DOTFILES/vim/vimrc 
+            $DOTFILES/git/gitconfig)
+    LINKS=( ~/.vimrc
+            ~/.vim 
+            ~/.tmux.conf
+            ~/.vimrc
+            ~/.gitconfig)
 
     #Global Vars (Auto Set - Changing will have BAD effects)
     ADMIN=0
@@ -116,7 +120,6 @@ ScriptSettings()
     TMUX=0
     ZSH=0
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -127,7 +130,7 @@ ScriptSettings()
 #-------------------------------------------------------------------------------
 PrintHelp()
 {
-    echo "${RESET}usage: $0 [--administrator] [--remove] [--upgrade] [--decrypt]$RESET"
+    echo "${RESET}usage: $0 [--administrator] [--remove] [--upgrade] [--decrypt] [--encrypt]$RESET"
     exit 0
 }
 
@@ -174,7 +177,6 @@ Remove()
 }
 
 
-
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  Upgrade
 #   DESCRIPTION:  Upgrade current setup after doing a git pull --upgrade
@@ -189,7 +191,6 @@ Upgrade()
     vim +PlugInstall +PlugUpdate +PlugClean +qall
     exit 0
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -214,6 +215,26 @@ DecryptSecure()
 }
 
 
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  EncryptSecure
+#   DESCRIPTION:  Encrypt secure file NOTE Must be called after AddToEnvironment
+#    PARAMETERS:  none
+#       RETURNS:  Success(0) or none
+#-------------------------------------------------------------------------------
+EncryptSecure()
+{
+    read -n 1 -p "$BOLD${BLUE}Use secure valut?$RESET (You must have a git repository setup) (y/N): $GREEN" choice
+    echo "$RESET"
+    case "$choice" in
+        y|Y ) :;;
+        n|N|* ) return;;
+    esac
+#    read -p "${RESET}Enter$BOLD$BLUE git repository of secure vault$RESET ex\"https://github.com/<user name>/secure.git\": $GREEN" REPO
+
+#    (cd $DOTFILES && exec git clone $REPO)
+    (exec $DOTFILES/scripts/lock.sh)
+    exit 0
+}
 
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  Init
@@ -238,6 +259,7 @@ Init()
             --remove) Remove;;
             --upgrade) Upgrade;;
             --decrypt) DecryptSecure;;
+            --encrypt) EncryptSecure;;
             -h|--help|*) PrintHelp;;
         esac;
         shift;
