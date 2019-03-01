@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Written by John Warnes
-# Based on vimrc setup from Hugo Valle
-# Modify on May-29-2017 by Hugo V. to fit my setup
+set -o nounset
+clear
+
 
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  DetectOS
@@ -10,41 +10,37 @@
 #    PARAMETERS:  None
 #       RETURNS:  None
 #-------------------------------------------------------------------------------
-#!/bin/bash
-#set -euo pipefail
-#IFS=$'\n\t'
-
-set -o nounset
-
-clear
-
 #
-#    MAC OS fix bash completion
-#
-#   brew install bash-completion
-#   brew install git
-#   brew link git
-#
-
 DetectOS()
 {
     # IDs help ---> https://github.com/zyga/os-release-zoo
-    SUPPORTEDDISTROS="ubuntu, linuxmint, debian, elementary OS, neon, peppermint, Zorin OS"
+    supported_distros="ubuntu, linuxmint, debian, elementary OS, neon, peppermint, Zorin OS"
 
     source /etc/os-release    #Load OS VARS
+    # :TRICKY:03/01/2019 05:12:09 PM:hvalle: Overwrite OS system variable based on OSTYPE
     case "$OSTYPE" in
-        solaris*) OS="SOLARIS" ;;
-        darwin*)  OS="OSX" ;;
-        linux*)   OS="LINUX" ;;
-        bsd*)     OS="BSD" ;;
-        msys*)    OS="WINDOWS" ;;
-        *)        OS="unknown: $OSTYPE" ;;
+        solaris*)   OS="SOLARIS" ;;
+        darwin*)    OS="OSX" ;;
+        linux*)     OS="LINUX" ;;
+        bsd*)       OS="BSD" ;;
+        msys*)      OS="WINDOWS" ;;
+        cygwin*)    OS="WINDOWS" ;;
+        *)          echo "unknown: $OSTYPE" 
+                    OS="unknown" ;;
     esac
 
+    if [[ $OS == "unknown" ]]; then
+        read -p "${BOLD}${RED}Unknown OSTYPE: $OS,${RESET} the script might not work. Do you want to procced <y/N>? " weird_os
+            case "$weird_os" in
+                y|Y ) : ;;
+                n|N|* ) echo "$RESET" exit -1;;
+            esac
+    fi
+
     if [[  $OS == 'LINUX' ]]; then
-        if [[  $SUPPORTEDDISTROS != *$ID* ]]; then
+        if [[  $supported_distros != *$ID* ]]; then
             echo "$BOLD${RED}ERROR:$RESET Undetect Linux: $ID $RESET"
-            echo "Supported:$BOLD$BLUE $SUPPORTEDDISTROS $RESET"
+            echo "Supported:$BOLD$BLUE $supported_distros $RESET"
             read -n 1 -p "Attempt to continue? $RESET (y/N): $GREEN" choice
             echo "$RESET"
             case "$choice" in
@@ -69,17 +65,28 @@ DetectOS()
             echo "$BOLD${YELLOW}Note:$RESET OSX:$BOLD$BLUE HomeBrew (https://brew.sh/)$RESET is required for auto install."
             echo "$BOLD${YELLOW}Note:$RESET Missing Packages will be listed."
         fi
+
+    elif [[  "$OS" == "WINDOWS" ]]; then
+        echo "Windows Detected $RESET"
+        if which pact 2> /dev/null; then
+            echo "$BOLD${YELLOW}Note!$RESET Missing Packages will installed using babun"
+            PACT=1;
+        else
+            PACT=0
+            echo "$BOLD${YELLOW}Note:$RESET WINDOWS:$BOLD$BLUE HomeBrew (https://babun.github.io/)$RESET is required for auto install."
+            echo "$BOLD${YELLOW}Note:$RESET Missing Packages will be listed."
+        fi
     fi
 
-
+    # Set Package Manager
     if [[ $OS == 'LINUX' ]]; then
         APTCMD='sudo apt-get -o Dpkg::Progress-Fancy="1" -y install'
     elif [[ $OS == 'OSX' ]]; then
         APTCMD='brew install'
+    elif [[ $OS == 'WINDOWS' ]]; then
+        APTCMD='pact install'
     fi
-
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -90,25 +97,32 @@ DetectOS()
 #-------------------------------------------------------------------------------
 ScriptSettings()
 {
-    SCRIPTNAME="WSU JCustom VIM IDE"
+    SCRIPTNAME="WSU Dr. V VIM IDE"
 
     #Directory Setup
     DOTFILES=$HOME/dotfiles
     LOCALBIN=~/.local/bin
-    ENV_FILES=($HOME/.bash_profile $HOME/.bash_login $HOME/.profile $HOME/.bashrc $HOME/.zshrc)
+    ENV_FILES=($HOME/.bash_profile 
+                $HOME/.bash_login 
+                $HOME/.profile 
+                $HOME/.bashrc)
 
     #Optional
-    OPTPKGS='vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman'
-    PIPPKGS='vim-vint proselint sphinx virtualenvwrapper'
+    OPTPKGS='zsh vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman'
+    PIPPKGS='vim-vint proselint sphinx virtualenvwrapper numpy pandas'
+    PKGS='git vim python3 curl bc'
 
-    if [[  $OS == 'LINUX' ]]; then  #LINUX
-        PKGS='git vim python3 curl bc'
-    elif [[  $OS == 'OSX' ]]; then  #OSX
-        PKGS='git vim python3 curl bc'
-    fi
-
-    FILES=($DOTFILES/vim/vimrc $DOTFILES/vim $DOTFILES/tmux/tmux.conf $DOTFILES/vim/vimrc $DOTFILES/git/gitconfig)
-    LINKS=(           ~/.vimrc        ~/.vim ~/.tmux.conf             ~/.vimrc            ~/.gitconfig)
+    # Note these two arrays must match by index number
+    FILES=($DOTFILES/vim/vimrc 
+            $DOTFILES/vim 
+            $DOTFILES/tmux/tmux.conf 
+            $DOTFILES/vim/vimrc 
+            $DOTFILES/git/gitconfig)
+    LINKS=( ~/.vimrc
+            ~/.vim 
+            ~/.tmux.conf
+            ~/.vimrc
+            ~/.gitconfig)
 
     #Global Vars (Auto Set - Changing will have BAD effects)
     ADMIN=0
@@ -116,7 +130,6 @@ ScriptSettings()
     TMUX=0
     ZSH=0
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -127,10 +140,9 @@ ScriptSettings()
 #-------------------------------------------------------------------------------
 PrintHelp()
 {
-    echo "${RESET}usage: $0 [--administrator] [--remove] [--upgrade] [--decrypt]$RESET"
+    echo "${RESET}usage: $0 [--administrator] [--remove] [--upgrade] [--decrypt] [--encrypt]$RESET"
     exit 0
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -142,6 +154,7 @@ PrintHelp()
 #-------------------------------------------------------------------------------
 Remove()
 {
+    # :TODO:03/01/2019 05:39:44 PM:hvalle: Need to add a backup/restore option
     echo "$RESET${RED}REMOVE$RESET Selected$RESET"
     echo "NOTE: There is no backup make are you sure?$RESET"
     read -n 1 -p "$BOLD${BLUE}Remove all configuration and files?$RESET (y/N): $GREEN" choice
@@ -152,10 +165,8 @@ Remove()
         * ) echo "Canceled$RESET";exit 0;;
     esac
 
-
     #Unlimk FILES
-    for LINK in ${LINKS[@]}
-    do
+    for LINK in ${LINKS[@]}; do
         unlink $LINK 2>/dev/null
     done
 
@@ -174,7 +185,6 @@ Remove()
 }
 
 
-
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  Upgrade
 #   DESCRIPTION:  Upgrade current setup after doing a git pull --upgrade
@@ -184,12 +194,12 @@ Remove()
 #-------------------------------------------------------------------------------
 Upgrade()
 {
+    # :TODO:03/01/2019 05:41:45 PM:hvalle: Need to test this more. Do I link back?
     unlink ~/.bash_aliases
     unlink ~/.zsh_aliases
     vim +PlugInstall +PlugUpdate +PlugClean +qall
     exit 0
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -214,6 +224,26 @@ DecryptSecure()
 }
 
 
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  EncryptSecure
+#   DESCRIPTION:  Encrypt secure file NOTE Must be called after AddToEnvironment
+#    PARAMETERS:  none
+#       RETURNS:  Success(0) or none
+#-------------------------------------------------------------------------------
+EncryptSecure()
+{
+    read -n 1 -p "$BOLD${BLUE}Use secure valut?$RESET (You must have a git repository setup) (y/N): $GREEN" choice
+    echo "$RESET"
+    case "$choice" in
+        y|Y ) :;;
+        n|N|* ) return;;
+    esac
+
+    (exec $DOTFILES/scripts/lock.sh)
+
+    exit 0
+}
+
 
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  Init
@@ -224,7 +254,6 @@ DecryptSecure()
 Init()
 {
     #Check if running as sudo
-    # TODO look into sudo -H
     if [[  $EUID == 0 ]]
     then
         echo "Do ${RED}NOT$RESET run this script as root or with sudo$RESET"
@@ -238,6 +267,7 @@ Init()
             --remove) Remove;;
             --upgrade) Upgrade;;
             --decrypt) DecryptSecure;;
+            --encrypt) EncryptSecure;;
             -h|--help|*) PrintHelp;;
         esac;
         shift;
@@ -248,9 +278,7 @@ Init()
     if [[ $ADMIN == 1 ]]; then
         echo "Admin Mode is:$BOLD$GREEN ON $RESET"
     fi
-
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -279,7 +307,6 @@ CheckOptional()
     fi
     echo ""
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -314,50 +341,13 @@ CheckDeps()
 }
 
 
-
 #---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  CheckVim
-#   DESCRIPTION:  Verifies a good vim
-#    PARAMETERS:  None
-#       RETURNS:  Success or Error
-#-------------------------------------------------------------------------------
-#CheckVim()
-#{
-#
-#    VIMS=(vim-gnome vim-gtk vim-athena vim-nox vim)
-#
-#    printf "Checking vim:$RESET"
-#    ERRFLAG=false
-#
-#    for PKG in $PKGS; do
-#        if [[  $(which $PKG | grep -o "$PKG") ]]; then
-#            printf "$BOLD$GREEN $PKG$RESET"
-#        else
-#            printf "$RED $PKG$RESET"
-#            ERRFLAG=true
-#        fi
-#    done
-#    echo ""
-#
-#    if [[  $ERRFLAG ]]; then
-#        if  $ADMIN != 1 ]]; then
-#            echo ""
-#            echo "${RED}ERROR:$RESET Missing Required Package: RUN:$BOLD$BLUE \"$0 --administrator\"$RESET attempt to fix $RESET"
-#            echo ""
-#            exit -1
-#        fi
-#    fi
-#}
-
-
-
-#---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  Setup
+#          NAME:  SetupSys
 #   DESCRIPTION:  Setup function for tmux, zsh
 #    PARAMETERS:  None
 #       RETURNS:  If selected, appends package setup to OSXPKGS or PKGS
 #-------------------------------------------------------------------------------
-Setup()
+SetupSys()
 {
     if [[ $OS == 'LINUX' ]]; then
         read -n 1 -p "Use/Install$BOLD$BLUE WSU campus$RESET network IPv6 fix$RESET (Y/n): $GREEN" choice
@@ -372,18 +362,18 @@ Setup()
     echo "$RESET"
     case "$choice" in
         n|N ) :;;
-        y|Y|* ) PKGS+=" tmux";OSXPKGS+=" tmux"; TMUX=true;;
+        y|Y|* ) PKGS+=" tmux"; TMUX=true;;
     esac
 
     read -n 1 -p "Setup$BOLD$BLUE zsh$RESET (Y/n): $GREEN" choice
     echo "$RESET"
     case "$choice" in
         n|N ) :;;
-        y|Y|* ) PKGS+=" zsh";OSXPKGS+=" zsh"; ZSH=true;;
+        y|Y|* ) PKGS+=" zsh"; ZSH=true;;
     esac
+
     echo ""
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -442,7 +432,6 @@ AdminSetup()
 }
 
 
-
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  GetUserInfo
 #   DESCRIPTION:  Capture User information. This is required to setup the
@@ -452,18 +441,41 @@ AdminSetup()
 #-------------------------------------------------------------------------------
 GetUserInfo()
 {
-    read -p "${RESET}Enter$BOLD$BLUE Full Name$RESET ex\"John Doe\": $GREEN" name
-    read -p "${RESET}Enter$BOLD$BLUE Author Ref$RESET ex\"jdoe\": $GREEN" ref
-    read -p "${RESET}Enter$BOLD$BLUE Email Address$RESET ex\"JohnD@mail.weber.edu\": $GREEN" email
-    read -p "${RESET}Enter$BOLD$BLUE Oganization$RESET ex\"WSU\": $GREEN" org
-    read -p "${RESET}Enter$BOLD$BLUE Company$RESET ex\"WSU\": $GREEN" com
+    read -p "${RESET}Enter$BOLD$BLUE Full Name$RESET ex\"Waldo Doe\": $GREEN" name
+    # Author ref
+    author_ref=(${name// / })
+    author_name="${author_ref[0]:0:1}${author_ref[1]}"  # take initialFirstName + lastName
+    author_name="${author_name,,}"          # Make it lower case
+    read -p "${RESET}Enter$BOLD$BLUE Author Ref$RESET (hit enter for default): \"$author_name\": $GREEN" ref
+    ref="${ref:-$author_name}"              # Set default
+    # Email
+    tmp_email="${author_ref[0],,}${author_ref[1],,}@weber.mail.edu"  
+    read -p "${RESET}Enter$BOLD$BLUE Email Address$RESET (hit enter for default): \"$tmp_email\": $GREEN" email
+    email="${email:-$tmp_email}"
+    # Organization
+    read -p "${RESET}Enter$BOLD$BLUE Oganization$RESET (hit enter for default): \"WSU\": $GREEN" org
+    org="${org:-WSU}"
+    # Company
+    read -p "${RESET}Enter$BOLD$BLUE Company$RESET (hit enter for default): \"WSU\": $GREEN" com
+    com="${com:-WSU}"
+    # License
     read -p "${RESET}Enter$BOLD$BLUE Default License$RESET (hit enter for default): $GREEN" license
     if [[  -z "$license" ]]; then
-        license='this program is free software: you can redistribute it and/or modify\nit under the terms of the GNU General Public License as published by\nthe Free Software Foundation, either version 3 of the License, or\n(at your option) any later version.\n\nThis program is distributed in the hope that it will be useful,\nbut WITHOUT ANY WARRANTY; without even the implied warranty of\nMERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\nGNU General Public License for more details.\n\nYou should have received a copy of the GNU General Public License\nalong with this program.  If not, see <http://www.gnu.org/licenses/>\n.'
+        license='this program is free software: you can redistribute it and/or modify
+        it under the terms of the GNU General Public License as published by
+        the Free Software Foundation, either version 3 of the License, or
+        (at your option) any later version.
+
+        This program is distributed in the hope that it will be useful,
+        but WITHOUT ANY WARRANTY; without even the implied warranty of
+        MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        GNU General Public License for more details.
+
+        You should have received a copy of the GNU General Public License
+        along with this program.  If not, see <http://www.gnu.org/licenses/>\n.'
     fi
     printf "$RESET"
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -592,6 +604,7 @@ ManageFilesAndLinks()
     mkdir -p $DOTFILES/vim/colors
     wget -O $DOTFILES/vim/colors/wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
 
+    # :TODO:03/01/2019 06:21:52 PM:hvalle: Move this to the prezto function to set zsh there
     #if [[  -f ~/.zshrc && $ZSH == true ]]; then
     #    echo "Appending soruces to$BOLD$GREEN ~/.zshrc$RESET"
     #    echo "source ~/.zsh_aliases" >> ~/.zshrc
@@ -599,7 +612,6 @@ ManageFilesAndLinks()
 
     echo ""
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -615,7 +627,6 @@ PatchPlugs()
     ln -s $DOTFILES/vim/patches/NerdTreePatch.vim $DOTFILES/vim/bundle/nerdtree/nerdtree_plugin/NerdTreePatch.vim
     echo ""
 }
-
 
 
 #---  FUNCTION  ----------------------------------------------------------------
@@ -660,7 +671,6 @@ AddToEnvironment()
 }
 
 
-
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  main
 #   DESCRIPTION:  This is the main driver function.
@@ -671,9 +681,13 @@ main()
 {
     source ./scripts/colors.sh
     DetectOS
+    
     ScriptSettings
+    
     Init "$@"     # Remember to pass the command line args $@
-    Setup
+    
+    SetupSys
+    
     CheckDeps
 
     if [[ $ADMIN == 1 ]]; then
@@ -719,4 +733,7 @@ main()
     echo ''
 
 }
+
+# Main Program
 main "$@"     #remember to pass all command line args
+exit 0
