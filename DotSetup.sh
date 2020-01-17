@@ -1,10 +1,19 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
+set -o errexit
+set -o pipefail
 set -o nounset
-clear
+# set -o xtrace
 
+# Set magic variables for current file & dir
+__dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+__file="${__dir}/$(basename "${BASH_SOURCE[0]}")"
+__base="$(basename ${__file} .sh)"
+__root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this as it depends on your app
 
-#---  FUNCTION  ----------------------------------------------------------------
+arg1="${1:-}"
+
+#--  FUNCTION  ----------------------------------------------------------------
 #          NAME:  DetectOS
 #   DESCRIPTION:  Set variables detecting the OS type
 #    PARAMETERS:  None
@@ -80,7 +89,7 @@ DetectOS()
 
     # Set Package Manager
     if [[ $OS == 'LINUX' ]]; then
-        APTCMD='sudo apt-get -o Dpkg::Progress-Fancy="1" -y install'
+        APTCMD='sudo apt -o Dpkg::Progress-Fancy="1" -y install'
     elif [[ $OS == 'OSX' ]]; then
         APTCMD='brew install'
     elif [[ $OS == 'WINDOWS' ]]; then
@@ -108,9 +117,9 @@ ScriptSettings()
                 $HOME/.bashrc)
 
     #Optional
-    OPTPKGS='zsh vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman'
+    OPTPKGS='zsh vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman libbz2-dev'
     PIPPKGS='vim-vint proselint sphinx virtualenvwrapper numpy pandas'
-    PKGS='git vim python3 curl bc'
+    PKGS='git vim python3 curl bc build-essential cmake libboost-all-dev doxygen'
 
     # Note these two arrays must match by index number
     FILES=($DOTFILES/vim/vimrc 
@@ -126,7 +135,6 @@ ScriptSettings()
 
     #Global Vars (Auto Set - Changing will have BAD effects)
     ADMIN=0
-    WSU=0
     TMUX=0
     ZSH=0
 }
@@ -349,14 +357,6 @@ CheckDeps()
 #-------------------------------------------------------------------------------
 SetupSys()
 {
-    if [[ $OS == 'LINUX' ]]; then
-        read -n 1 -p "Use/Install$BOLD$BLUE WSU campus$RESET network IPv6 fix$RESET (Y/n): $GREEN" choice
-        echo "$RESET"
-        case "$choice" in
-            n|N ) WSU=false;;
-            y|Y|* ) WSU=true;;
-        esac
-    fi
 
     read -n 1 -p "Setup$BOLD$BLUE tmux$RESET (Y/n): $GREEN" choice
     echo "$RESET"
@@ -388,16 +388,6 @@ AdminSetup()
     echo "$BOLD${BLUE}Admin Setup$RESET ($OS)"
     ERRFLAG=false
     APTOPT=''
-
-    # Fix for apt-get linuxes and wsu ipv6 firewall 
-    if [[  $OS == 'LINUX' ]]; then
-        if [[ "$WSU" == true ]]; then
-            # Fixes for Ubuntu and IPv6 inside WSU
-            echo "Adding WSU firewall$BOLD$BLUE IPv6 fix$RESET"
-            echo 'Acquire::ForceIPv4 "true";' | sudo tee /etc/apt/apt.conf.d/99force-ipv4
-            APTOPT='-o Acquire::ForceIPv4=true'
-        fi
-    fi
 
     echo -n "$BOLD${BLUE}Installing Packages: $RESET"
     for PKG in $PKGS; do
@@ -680,6 +670,7 @@ AddToEnvironment()
 main()
 {
     source ./scripts/colors.sh
+    
     DetectOS
     
     ScriptSettings
@@ -690,8 +681,9 @@ main()
     
     CheckDeps
 
-    if [[ $ADMIN == 1 ]]; then
-	CheckOptional
+    if [[ $ADMIN == 1 ]]
+    then
+	    CheckOptional
         AdminSetup
     fi
     
