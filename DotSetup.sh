@@ -117,7 +117,7 @@ ScriptSettings()
                 $HOME/.bashrc)
 
     #Optional
-    OPTPKGS='zsh vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman libbz2-dev'
+    OPTPKGS='zsh vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman libbz2-dev bats'
     PIPPKGS='vim-vint proselint sphinx virtualenvwrapper numpy pandas'
     PKGS='git vim python3 curl bc build-essential cmake libboost-all-dev doxygen'
 
@@ -130,7 +130,6 @@ ScriptSettings()
     LINKS=( ~/.vimrc
             ~/.vim 
             ~/.tmux.conf
-            ~/.vimrc
             ~/.gitconfig)
 
     #Global Vars (Auto Set - Changing will have BAD effects)
