@@ -2,3 +2,6 @@
 templates/personal.template
 git/gitconfig
 .ropeproject/
+
+# Secure folder
+secure/*
