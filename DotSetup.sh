@@ -116,10 +116,11 @@ ScriptSettings()
                 $HOME/.profile 
                 $HOME/.bashrc)
 
+    # TODO: gem install colorls
     #Optional
-    OPTPKGS='zsh vim-gnome clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman libbz2-dev bats'
+    OPTPKGS='neovim python3-neovim nodejs npm tree clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman libbz2-dev bats ruby ruby-dev zlib1g-dev pkg-config libglib2.0-dev binutils-dev autoconf libtool libssl-dev libpixman-1-dev virtualenv'
     PIPPKGS='vim-vint proselint sphinx virtualenvwrapper numpy pandas'
-    PKGS='git vim python3 curl bc build-essential cmake libboost-all-dev doxygen'
+    PKGS='git wget vim python3 curl bc build-essential cmake libboost-all-dev doxygen '
 
     # Note these two arrays must match by index number
     FILES=($DOTFILES/vim/vimrc 
@@ -172,6 +173,7 @@ Remove()
         * ) echo "Canceled$RESET";exit 0;;
     esac
 
+
     #Unlimk FILES
     for LINK in ${LINKS[@]}; do
         unlink $LINK 2>/dev/null
@@ -201,7 +203,7 @@ Remove()
 #-------------------------------------------------------------------------------
 Upgrade()
 {
-    # :TODO:03/01/2019 05:41:45 PM:hvalle: Need to test this more. Do I link back?
+    # TODO:03/01/2019 05:41:45 PM:hvalle: Need to test this more. Do I link back?
     unlink ~/.bash_aliases
     unlink ~/.zsh_aliases
     vim +PlugInstall +PlugUpdate +PlugClean +qall
@@ -583,6 +585,7 @@ CreateGitConfig()
 ManageFilesAndLinks()
 {
     echo "Creating$BOLD$GREEN symlinks$RESET"
+    # TODO: If file exist, make a copy and move it out of way
     for ((i=0; i<=${#LINKS[@]}-1;i++))
     do
         echo "Linked$BOLD$GREEN ${LINKS[${i}]} $RESET->$BOLD$BLUE ${FILES[${i}]} $RESET"
@@ -593,7 +596,7 @@ ManageFilesAndLinks()
     mkdir -p $DOTFILES/vim/colors
     wget -O $DOTFILES/vim/colors/wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
 
-    # :TODO:03/01/2019 06:21:52 PM:hvalle: Move this to the prezto function to set zsh there
+    # TODO:03/01/2019 06:21:52 PM:hvalle: Move this to the prezto function to set zsh there
     #if [[  -f ~/.zshrc && $ZSH == true ]]; then
     #    echo "Appending soruces to$BOLD$GREEN ~/.zshrc$RESET"
     #    echo "source ~/.zsh_aliases" >> ~/.zshrc
@@ -693,13 +696,13 @@ main()
     AddToEnvironment
 
     #Install Powerline Fonts?
-    read -n 1 -p  "Install$BOLD$BLUE PowerLine Fonts$RESET (Y/n): $GREEN" choice
-    case "$choice" in
-        n|N ) :;;
-        y|Y|* ) InstallPowerlineFonts;;
+    # read -n 1 -p  "Install$BOLD$BLUE PowerLine Fonts$RESET (Y/n): $GREEN" choice
+    # case "$choice" in
+    #     n|N ) :;;
+    #     y|Y|* ) InstallPowerlineFonts;;
 
-    esac
-    echo "$RESET"
+    # esac
+    # echo "$RESET"
 
     CreatePersonalTemplate
     CreateGitConfig
@@ -714,14 +717,6 @@ main()
 #        sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 #        AddToEnvironment
 #    fi
-
-    echo '      _       _                 _     _         '
-    echo '     (_)_   _(_)_ __ ___       (_) __| | ___    '
-    echo '     | \ \ / / | `_ ` _ \ _____| |/ _` |/ _ \   '
-    echo '     | |\ V /| | | | | | |_____| | (_| |  __/   '
-    echo '    _/ | \_/ |_|_| |_| |_|     |_|\__,_|\___|   '
-    echo '   |__/                    ${BOLD}Enjoy a better vim$RESET   '
-    echo ''
 
 }
 
