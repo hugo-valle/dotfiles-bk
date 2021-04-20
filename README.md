@@ -3,24 +3,28 @@
 Install Script for Advanced dotfiles and vim setup.
 
 ## Features
+- Gurvbox color scheme integrated
 - Neovim and Vim 8 Supported
 - Termnal vim and GUI vim supported
-- Gurvbox color scheme integrated
-- ALE / Symatic Code linter
-- Nerdtree
-- Tagbar
+  - ALE / Symatic Code linter
+  - Nerdtree
+  - Tagbar
+  - UltiSnips
 - Tmux Shell Multiplexer
 - Zsh Shell Support
 - Changing Fonts
-- UltiSnips
 - Python Mode
-- Bash customisation
-- Encrypted personal alises
-- .gitconfig
+- Bash customization
+- Encrypted personal aliases
+- Git Configuration: `.gitconfig`
 - Useful shell scripts
-- c/c++/python templates
-- Custom simple auto metadata
-- Many more...
+- c/c++ Development Setup
+  - Compiler: `g++`
+  - Building Tool: `cmake`
+  - Documentation: `doxygen`
+  - Boost libraries: `libboost-all-dev`
+  - Compression Tool: `libbz2-dev`
+  - Many more...
 
 ## Theme ScreenShots
 Default Dark Setup  
@@ -36,34 +40,35 @@ Need more contrast for theme? Try `<F6>`
 ![Dark Contrasts](/_assets/Dark_Contrasts.gif "Dark Contrasts")
 ![Light Contrasts](/_assets/Light_Contrasts.gif "Light Contrasts")
 
-## Instillation
+## Installation
 1. Clone into `$HOME` folder  
+```bash 
+$ cd $HOME
+$ git clone https://github.com/hugo-valle/dotfiles.git
 ```
-~/git clone https://github.com/hugo-valle/dotfiles.git
-```
+
 2. Change into dotfiles folder  
+```bash
+$ cd dotfiles
 ```
-~/ ch dotfiles`
-```
+
 3. Run DotSetup.sh  
-```
-~/dotfiles/ ./DotSetup.sh
-```
-or
-```
-~/dotfiles/ bash DotSetup.sh
+```bash
+$ ./DotSetup.sh
+# or
+$ bash DotSetup.sh
 ```
 4. Answer setup questions  
-4. Enjoy jvim
+5. Enjoy jvim
 
 ## Supported OS
- - Linux
+ - Linux: most distros
  - Mac OSX
- - Ubunutu on windows 10
- - Babun
+ - Windows 10 (wsl)
+ - Babun shell (Windows)
 
-
-## Controls  
+---
+## Vim Controls  
 ### Map Leader
 map leader = `,`  
 
@@ -93,10 +98,9 @@ map leader = `,`
 `<Alt+[Left,Right]>` to move current tab  
 `<Crtl+PageUp>` or `<Ctrl+PageDown` to change tabs  
 
-# Includes the JVim Plugin  
-# Documentation for the JVim Plugin  
+## Includes the JVim Plugin  
+### Documentation for the JVim Plugin  
 
-# JVim Plugin
 Version 2.0  
 
 ## Installation
@@ -224,5 +228,3 @@ Example of codePretty text changes
 `:Q!` becomes `q!`  
 `:W` becomes `w`  
 `:W!` becomes `w!`  
-
-
