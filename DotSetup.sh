@@ -12,6 +12,8 @@ __base="$(basename ${__file} .sh)"
 __root="$(cd "$(dirname "${__dir}")" && pwd)" # <-- change this as it depends on your app
 
 arg1="${1:-}"
+# timestamp
+ts=`date +%y-%m-%d-%H-%M`
 
 #--  FUNCTION  ----------------------------------------------------------------
 #          NAME:  DetectOS
@@ -116,9 +118,8 @@ ScriptSettings()
                 $HOME/.profile 
                 $HOME/.bashrc)
 
-    # TODO: gem install colorls
     #Optional
-    OPTPKGS='neovim python3-neovim nodejs npm tree clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman libbz2-dev bats ruby ruby-dev zlib1g-dev pkg-config libglib2.0-dev binutils-dev autoconf libtool libssl-dev libpixman-1-dev virtualenv'
+    OPTPKGS='neovim python3-neovim nodejs npm tree clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman libbz2-dev bats ruby ruby-dev zlib1g-dev pkg-config libglib2.0-dev binutils-dev autoconf libtool libssl-dev libpixman-1-dev virtualenv fontconfig'
     PIPPKGS='vim-vint proselint sphinx virtualenvwrapper numpy pandas'
     PKGS='git wget vim python3 curl bc build-essential cmake libboost-all-dev doxygen '
 
@@ -126,16 +127,16 @@ ScriptSettings()
     FILES=($DOTFILES/vim/vimrc 
             $DOTFILES/vim 
             $DOTFILES/tmux/tmux.conf 
-            $DOTFILES/vim/vimrc 
+            $DOTFILES/bash/bashrc 
             $DOTFILES/git/gitconfig)
     LINKS=( ~/.vimrc
             ~/.vim 
             ~/.tmux.conf
+            ~/.bashrc
             ~/.gitconfig)
 
     #Global Vars (Auto Set - Changing will have BAD effects)
     ADMIN=0
-    TMUX=0
     ZSH=0
 }
 
@@ -148,7 +149,7 @@ ScriptSettings()
 #-------------------------------------------------------------------------------
 PrintHelp()
 {
-    echo "${RESET}usage: $0 [--administrator] [--remove] [--upgrade] [--decrypt] [--encrypt]$RESET"
+    echo "${RESET}usage: $0 [--administrator] [--remove] [--backup] [--upgrade] [--decrypt] [--encrypt]$RESET"
     exit 0
 }
 
@@ -158,13 +159,14 @@ PrintHelp()
 #   DESCRIPTION:  Removes current setup files. Invoke with --remove
 #    PARAMETERS:  None
 #       RETURNS:  None
-#          Note:  There is NO backup.
+#          Note:  
 #-------------------------------------------------------------------------------
 Remove()
 {
-    # :TODO:03/01/2019 05:39:44 PM:hvalle: Need to add a backup/restore option
     echo "$RESET${RED}REMOVE$RESET Selected$RESET"
-    echo "NOTE: There is no backup make are you sure?$RESET"
+    # Run backup just in case
+    Backup
+
     read -n 1 -p "$BOLD${BLUE}Remove all configuration and files?$RESET (y/N): $GREEN" choice
     echo ""
     case "$choice" in
@@ -274,6 +276,7 @@ Init()
         case $1 in
             --administrator) ADMIN=1;;
             --remove) Remove;;
+            --backup) Backup;;
             --upgrade) Upgrade;;
             --decrypt) DecryptSecure;;
             --encrypt) EncryptSecure;;
@@ -351,29 +354,178 @@ CheckDeps()
 
 
 #---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  SetupSys
-#   DESCRIPTION:  Setup function for tmux, zsh
+#          NAME:  SetupZsh
+#   DESCRIPTION:  Setup function for zsh
 #    PARAMETERS:  None
-#       RETURNS:  If selected, appends package setup to OSXPKGS or PKGS
+#       RETURNS:  If selected, setup the 10K
 #-------------------------------------------------------------------------------
-SetupSys()
+SetupZsh()
 {
-
-    read -n 1 -p "Setup$BOLD$BLUE tmux$RESET (Y/n): $GREEN" choice
-    echo "$RESET"
-    case "$choice" in
-        n|N ) :;;
-        y|Y|* ) PKGS+=" tmux"; TMUX=true;;
-    esac
 
     read -n 1 -p "Setup$BOLD$BLUE zsh$RESET (Y/n): $GREEN" choice
     echo "$RESET"
     case "$choice" in
         n|N ) :;;
-        y|Y|* ) PKGS+=" zsh"; ZSH=true;;
+        y|Y|* ) ZSH=true;;
     esac
 
     echo ""
+    if [[ "$ZSH" != true ]]
+    then
+        echo "Next time, you should consider using it :)"
+        return
+    fi
+
+    # Begin Setup and Configuration
+    if [[ -d  ~/.oh-my-zsh ]] 
+    then
+        echo "You already have oh-my-zsh"
+    else
+        echo "Downloading and installing: oh-my-zsh"
+        # sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+        git clone --depth=1 git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
+    fi
+
+
+    echo "Downloading and installing plugins: autosuggestions, syntax-highlighting"
+    if [ -d ~/.oh-my-zsh/plugins/zsh-autosuggestions ]; then
+        cd ~/.oh-my-zsh/plugins/zsh-autosuggestions && git pull
+    else
+        git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/plugins/zsh-autosuggestions
+    fi
+
+    if [ -d ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting ]; then
+        cd ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting && git pull
+    else
+        git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+    fi
+
+    # if [ -d ~/.oh-my-zsh/custom/plugins/zsh-completions ]; then
+    #     cd ~/.oh-my-zsh/custom/plugins/zsh-completions && git pull
+    # else
+    #     git clone --depth=1 https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
+    # fi
+
+    # if [ -d ~/.oh-my-zsh/custom/plugins/zsh-history-substring-search ]; then
+    #     cd ~/.oh-my-zsh/custom/plugins/zsh-history-substring-search && git pull
+    # else
+    #     git clone --depth=1 https://github.com/zsh-users/zsh-history-substring-search ~/.oh-my-zsh/custom/plugins/zsh-history-substring-search
+    # fi
+
+
+    # INSTALL FONTS
+    echo -e "Installing Nerd Fonts version of Hack, Roboto Mono, DejaVu Sans Mono\n"
+
+    wget -q --show-progress -N https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/Hack/Regular/complete/Hack%20Regular%20Nerd%20Font%20Complete.ttf -P ~/.fonts/
+    wget -q --show-progress -N https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/RobotoMono/Regular/complete/Roboto%20Mono%20Nerd%20Font%20Complete.ttf -P ~/.fonts/
+    wget -q --show-progress -N https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/DejaVuSansMono/Regular/complete/DejaVu%20Sans%20Mono%20Nerd%20Font%20Complete.ttf -P ~/.fonts/
+
+    fc-cache -fv ~/.fonts
+
+    # Theme
+    echo "Downloading and installing: PowerLevel10K theme"
+    if [ -d ~/.oh-my-zsh/custom/themes/powerlevel10k ]
+    then
+        cd ~/.oh-my-zsh/custom/themes/powerlevel10k  && git pull
+    else
+        git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+    fi
+
+    # external plugins, things, will be installed in here
+    if [ -d  ~/.quickzsh ]
+    then
+        echo "Plugin folder ~/.quickzsh ready"
+    else
+        mkdir -p ~/.quickzsh
+    fi
+    
+    # Command line Fuzzi finder
+    if [ -d ~/.quickzsh/fzf ]
+    then
+        cd ~/.quickzsh/fzf && git pull
+        ~/.quickzsh/fzf/install --all --key-bindings --completion --no-update-rc
+    else
+        git clone --depth 1 https://github.com/junegunn/fzf.git ~/.quickzsh/fzf
+        ~/.quickzsh/fzf/install --all --key-bindings --completion --no-update-rc
+    fi
+    
+    # Directory listings for zsh with git features
+    if [ -d ~/.oh-my-zsh/custom/plugins/k ]
+    then
+        cd ~/.oh-my-zsh/custom/plugins/k && git pull
+    else
+        git clone --depth 1 https://github.com/supercrabtree/k ~/.oh-my-zsh/custom/plugins/k
+    fi
+
+    # Marker is a command palette for the terminal
+    if [ -d ~/.quickzsh/marker ]
+    then
+        cd ~/.quickzsh/marker && git pull
+    else
+        git clone --depth 1 https://github.com/pindexis/marker ~/.quickzsh/marker
+    fi
+
+    if ~/.quickzsh/marker/install.py
+    then
+        echo -e "Installed Marker\n"
+    else
+        echo -e "Marker Installation Had Issues\n"
+    fi
+
+    # if git clone --depth 1 https://github.com/todotxt/todo.txt-cli.git ~/.quickzsh/todo; then :
+    # else
+    #     cd ~/.quickzsh/todo && git fetch --all && git reset --hard origin/master
+    # fi
+    # mkdir ~/.quickzsh/todo/bin ; cp -f ~/.quickzsh/todo/todo.sh ~/.quickzsh/todo/bin/todo.sh # cp todo.sh to ./bin so only it is included in $PATH
+    # #touch ~/.todo/config     # needs it, otherwise spits error , yeah a bug in todo
+    # ln -s ~/.quickzsh/todo ~/.todo
+    if [ ! -L ~/.quickzsh/todo/bin/todo.sh ]; then
+        echo -e "Installing todo.sh in ~/.quickzsh/todo\n"
+        mkdir -p ~/.quickzsh/todo/bin
+        wget -q --show-progress "https://github.com/todotxt/todo.txt-cli/releases/download/v2.11.0/todo.txt_cli-2.11.0.tar.gz" -P ~/.quickzsh/
+        tar xvf ~/.quickzsh/todo.txt_cli-2.11.0.tar.gz -C ~/.quickzsh/todo --strip 1 && rm ~/.quickzsh/todo.txt_cli-2.11.0.tar.gz
+        ln -s ~/.quickzsh/todo/todo.sh ~/.quickzsh/todo/bin/todo.sh     # so only .../bin is included in $PATH
+        ln -s ~/.quickzsh/todo/todo.cfg ~/.todo.cfg     # it expects it there or ~/todo.cfg or ~/.todo/config
+    else
+        echo -e "todo.sh is already instlled in ~/.quickzsh/todo/bin/\n"
+    fi
+
+    if [[ $1 == "--cp-hist" ]] || [[ $1 == "-c" ]]; then
+        echo -e "\nCopying bash_history to zsh_history\n"
+        if command -v python &>/dev/null; then
+            wget -q --show-progress https://gist.githubusercontent.com/muendelezaji/c14722ab66b505a49861b8a74e52b274/raw/49f0fb7f661bdf794742257f58950d209dd6cb62/bash-to-zsh-hist.py
+            cat ~/.bash_history | python bash-to-zsh-hist.py >> ~/.zsh_history
+        else
+            if command -v python3 &>/dev/null; then
+                wget -q --show-progress https://gist.githubusercontent.com/muendelezaji/c14722ab66b505a49861b8a74e52b274/raw/49f0fb7f661bdf794742257f58950d209dd6cb62/bash-to-zsh-hist.py
+                cat ~/.bash_history | python3 bash-to-zsh-hist.py >> ~/.zsh_history
+            else
+                echo "Python is not installed, can't copy bash_history to zsh_history\n"
+            fi
+        fi
+    else
+        echo -e "\nNot copying bash_history to zsh_history, as --cp-hist or -c is not supplied\n"
+    fi
+
+
+ 
+    # ls tools
+    sudo gem install colorls
+    
+    # AddToEnvironment
+    # Create symlink
+    rm ~/.zshrc
+    ln -s $DOTFILES/zsh/zshrc ~/.zshrc
+        
+    # source ~/.zshrc
+    echo -e "\nSudo access is needed to change default shell\n"
+
+    if chsh -s $(which zsh) && /bin/zsh -i -c omz update; then
+        echo -e "Installation Successful, exit terminal and enter a new session"
+    else
+        echo -e "Something is wrong"
+    fi
+    echo "Remember to Install Nerdfonts: www.nerdfonts.com"
 }
 
 
@@ -470,31 +622,6 @@ GetUserInfo()
 
 
 #---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  InstallPowerLineFonts
-#   DESCRIPTION:  Install Powerline Fonts. This is required to display all
-#                 special characters in the status bar inside vim.
-#    PARAMETERS:  None
-#       RETURNS:  Success or Error
-#-------------------------------------------------------------------------------
-InstallPowerlineFonts()
-{
-    echo "$RESET"
-    # clone fonts
-    git clone https://github.com/powerline/fonts.git
-    # install fonts
-    cd fonts
-    ./install.sh
-    # clean-up a bit
-    cd ..
-    rm -rf fonts
-
-    dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/font "'DejaVu Sans Mono for Powerline Book 12'"
-    dconf write /org/gnome/terminal/legacy/profiles:/:b1dcc9dd-5262-4d8d-a863-c897e6d979b9/use-system-font "false"
-}
-
-
-
-#---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  CreatePersonalTemplate
 #   DESCRIPTION:  Create personal vim templates for c, perl, bash, etc
 #    PARAMETERS:  None
@@ -585,7 +712,9 @@ CreateGitConfig()
 ManageFilesAndLinks()
 {
     echo "Creating$BOLD$GREEN symlinks$RESET"
-    # TODO: If file exist, make a copy and move it out of way
+    # Make a copy and move it out of way
+    Backup
+
     for ((i=0; i<=${#LINKS[@]}-1;i++))
     do
         echo "Linked$BOLD$GREEN ${LINKS[${i}]} $RESET->$BOLD$BLUE ${FILES[${i}]} $RESET"
@@ -596,27 +725,7 @@ ManageFilesAndLinks()
     mkdir -p $DOTFILES/vim/colors
     wget -O $DOTFILES/vim/colors/wombat256mod.vim http://www.vim.org/scripts/download_script.php?src_id=13400
 
-    # TODO:03/01/2019 06:21:52 PM:hvalle: Move this to the prezto function to set zsh there
-    #if [[  -f ~/.zshrc && $ZSH == true ]]; then
-    #    echo "Appending soruces to$BOLD$GREEN ~/.zshrc$RESET"
-    #    echo "source ~/.zsh_aliases" >> ~/.zshrc
-    #fi
 
-    echo ""
-}
-
-
-#---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  PatchPlugs
-#   DESCRIPTION:  Patch Plugins
-#    PARAMETERS:  None
-#       RETURNS:  Success or Error
-#-------------------------------------------------------------------------------
-PatchPlugs()
-{
-    echo "Patching NerdTree:$RESET$BOLD$BLUE $DOTFILES/vim/bundle/nerdtree/nerdtree_plugin/NerdTreePatch.vim$RESET"
-    mkdir -p $DOTFILES/vim/bundle/nerdtree/nerdtree_plugin
-    ln -s $DOTFILES/vim/patches/NerdTreePatch.vim $DOTFILES/vim/bundle/nerdtree/nerdtree_plugin/NerdTreePatch.vim
     echo ""
 }
 
@@ -662,6 +771,74 @@ AddToEnvironment()
     echo ""
 }
 
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  BackupFile
+#   DESCRIPTION: Make a bk copy of a file if it exist 
+#    PARAMETERS:  File to backup
+#       RETURNS:  none
+#-------------------------------------------------------------------------------
+BackupFile()
+{
+    local file=$1
+    local bkfile="$file.bk.$ts"
+    # Check if file exist in home area
+    if [ -L $file  ]
+    then
+        if [ -e $file ]
+        then
+            echo "Good link $BOLD$GREEN $file $RESET"
+            echo "Creating a backup $BOLD$BLUE $bkfile $RESET."
+            # Skip symlinks to folders
+            if [[ $file  == ~/.vim ]] 
+            then
+                echo "Symlink to dir $BOLD$BLUE ${LINKS[${i}]} $RESET."
+            else
+                # Make bk copy
+                cp $file $bkfile
+            fi
+            # Remove old file
+            rm $file
+        else
+            echo "Broken link $BOLD$RED $file $RESET"
+            # Remove old file
+            rm $file
+        fi
+    elif [ -e $file  ]
+    then
+        echo "Not a link $BOLD$BLUE $file $RESET"
+            # Make bk
+            echo "Creating a backup $BOLD$BLUE $bkfile $RESET."
+            cp $file $bkfile
+            # Remove old file
+            rm $file
+    elif [ -d $file  ]
+    then
+        echo "$BOLD$BLUE $file $RESET folder exist"
+            # Make bk
+            echo "Creating a dir backup $BOLD$BLUE $bkfile $RESET."
+            cp -r $file $bkfile
+            # Remove old file
+            rm -rf $file
+    else
+        echo "Missing $BOLD$RED $file $RESET"
+    fi
+}
+
+#---  FUNCTION  ----------------------------------------------------------------
+#          NAME:  Backup
+#   DESCRIPTION: Make a bk copy of a file if it exist 
+#    PARAMETERS:  File to backup
+#       RETURNS:  none
+#-------------------------------------------------------------------------------
+Backup()
+{
+    echo "Backing up $BOLD$GREEN current dotfiles$RESET"
+    for ((i=0; i<=${#LINKS[@]}-1;i++))
+    do
+        echo "Backup$BOLD$GREEN ${LINKS[${i}]} $RESET"
+        BackupFile ${LINKS[${i}]}
+    done
+}
 
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  main
@@ -675,11 +852,9 @@ main()
     
     DetectOS
     
-    ScriptSettings
+    ScriptSettings # Set arrays of files to link
     
     Init "$@"     # Remember to pass the command line args $@
-    
-    SetupSys
     
     CheckDeps
 
@@ -691,32 +866,17 @@ main()
     
     GetUserInfo   # Get user information
 
-    ManageFilesAndLinks   #Create Dirs Copy Files and Make Links
+    ManageFilesAndLinks   # Create Dirs Copy Files and Make Links
 
-    AddToEnvironment
+    CreatePersonalTemplate # Personal template for some plugins
+    
+    CreateGitConfig # Git config file
 
-    #Install Powerline Fonts?
-    # read -n 1 -p  "Install$BOLD$BLUE PowerLine Fonts$RESET (Y/n): $GREEN" choice
-    # case "$choice" in
-    #     n|N ) :;;
-    #     y|Y|* ) InstallPowerlineFonts;;
+    vim +PlugInstall +qall # Install the vim plugin system and updates all plugins
 
-    # esac
-    # echo "$RESET"
+    # DecryptSecure
 
-    CreatePersonalTemplate
-    CreateGitConfig
-
-    vim +PlugInstall +qall #Installs the vim plugin system and updates all plugins
-
-    PatchPlugs
-    DecryptSecure
-
-#    if [[ "$ZSH" == true ]]; then
-#        echo "Downloading and installing: oh-my-zsh"
-#        sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-#        AddToEnvironment
-#    fi
+    SetupZsh    # Zsh setup
 
 }
 
