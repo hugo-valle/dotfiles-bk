@@ -510,7 +510,13 @@ SetupZsh()
 
  
     # ls tools
-    sudo gem install colorls
+    if [[ $OS == 'LINUX' ]]
+    then
+        sudo gem install colorls
+    elif [[ $OS == 'OSX' ]]
+    then
+        gem install colorls
+    fi
     
     # AddToEnvironment
     # Create symlink
@@ -699,6 +705,17 @@ CreateGitConfig()
 [url \"https://github.com/\"]
     insteadOf = gh:
 " "$name" "$email" > $DOTFILES/git/gitconfig
+
+    # Set GitHub 
+    if [[ $OS == 'LINUX' ]]
+    then
+        # For linux add repository
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+        sudo apt-add-repository https://cli.github.com/packages
+        sudo apt update
+    fi
+    # Note: Mac should be fine with just brew
+    $APTCMD  gh
 }
 
 
@@ -847,7 +864,7 @@ Backup()
 #       RETURNS:  Success or Error
 #-------------------------------------------------------------------------------
 main()
-{
+ {
     source ./scripts/colors.sh
     
     DetectOS
@@ -878,8 +895,11 @@ main()
 
     SetupZsh    # Zsh setup
 
+    echo "To complete your GitHub Setup run the following commnad:"
+    echo "$BOLD$BLUE $DOTFILES gh auth login $RESET"
 }
 
-# Main Program
+############################ Main Program #####################################
 main "$@"     #remember to pass all command line args
+
 exit 0
