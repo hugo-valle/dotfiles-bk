@@ -1,6 +1,6 @@
 "=================================================================
-"  Revision  29
-"  Modified  Thursday, 01 April 2021
+"  Revision  30
+"  Modified  Wednesday, 21 April 2021
 "=================================================================
 
 "=================================================================
@@ -17,7 +17,7 @@ let g:NERDTreeQuitOnOpen    =0          " close NERDTree after  file is opened
 " ---> to hide unwanted files <---
 let g:NERDTreeIgnore = [ '__pycache__', '\.pyc$', '\.o$', '\.swp',  '*\.swp',  'node_modules/'  ]
 let g:NERDTreeShowHidden    =1          " show hidden files in NERDTree
-let g:NERDTreeWinSize       =15
+let g:NERDTreeWinSize       =20
 let g:NERDTreeCustomOpenArgs = {'file':{'where':'t'}}    " Open file in newtab
 let g:NERDTreeMinimalUI = 1
 let g:NERDTreeIgnore = []

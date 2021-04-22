@@ -33,9 +33,9 @@ source $HOME/dotfiles/vim/vim_plugs/fugitive.vim
 "source $HOME/dotfiles/vim/vim_plugs/language_support.vim
 "source $HOME/dotfiles/vim/vim_plugs/ale.vim
 " Inteligent
-source $HOME/dotfiles/vim/vim_plugs/coc.vim
+"source $HOME/dotfiles/vim/vim_plugs/coc.vim
 " File Fuzzy Finder
-source $HOME/dotfiles/vim/vim_plugs/fzf.vim
+"source $HOME/dotfiles/vim/vim_plugs/fzf.vim
 
 
 "} ===

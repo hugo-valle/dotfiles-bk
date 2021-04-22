@@ -1,7 +1,9 @@
 .*.swp
-templates/personal.template
-git/gitconfig
-.ropeproject/
 
 # Secure folder
 secure/*
+
+# templates
+git/gitconfig
+vim/templates/personal.template
+.ropeproject/

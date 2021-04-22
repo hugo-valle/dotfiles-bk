@@ -5,8 +5,8 @@
 SetMacro( 'AUTHOR',       'Hugo Valle' )
 SetMacro( 'AUTHORREF',    'hvalle' )
 SetMacro( 'EMAIL',        'hugovalle1@weber.edu' )
-SetMacro( 'ORGANIZATION', '' )
-SetMacro( 'COMPANY',      '' )
+SetMacro( 'ORGANIZATION', 'WSU' )
+SetMacro( 'COMPANY',      'WSU' )
 SetMacro( 'COPYRIGHT',    'Copyright (c) |YEAR|, |AUTHOR|' )
 SetMacro( 'LICENSE',      '' )
 
