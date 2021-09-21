@@ -8,3 +8,4 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
 
 Reference: https://hackernoon.com/using-tmux-to-improve-your-terminal-experience-jt4932zv 
+https://draculatheme.com/tmux?ref=hackernoon.com 
