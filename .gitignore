@@ -7,3 +7,7 @@ secure/*
 git/gitconfig
 vim/templates/personal.template
 .ropeproject/
+
+# ignore vim undo folder
+vim/undo/*
+vim/undodir/*

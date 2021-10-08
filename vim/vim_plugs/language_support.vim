@@ -1,6 +1,6 @@
 "=================================================================
-"  Revision  14
-"  Modified  Sunday, 28 February 2021
+"  Revision  15
+"  Modified  Sunday, 26 September 2021
 "=================================================================
 
 "=================================================================
@@ -42,4 +42,11 @@ augroup Python
     autocmd!
     autocmd BufNewFile *.py silent! 0r ~/.vim/templates/python_mode.template | cal cursor(8,4)
 augroup END
+"} ===
+
+
+"=================================================================
+" Trim whitespace
+"=================================================================
+Plug 'ntpeters/vim-better-whitespace'
 "} ===

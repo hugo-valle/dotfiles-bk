@@ -107,6 +107,19 @@ nnoremap tl  :tablast<CR>
 
 "} ===
 
+if &diff
+        " Your setting you want to set when using diff mode.
+        "nnoremap <expr> <C-J> &diff ? ']c' : '<C-W>j'
+        nnoremap <Leader>n ]c
+        nnoremap <Leader>N [c
+        " Built-in shortcut: do
+        nnoremap <Leader>] :diffget<CR>
+        " Built-in shortcut: dp
+        nnoremap <Leader>] :diffget<CR>
+        nnoremap <Leader>[ :diffput<CR>
+        nnoremap <Leader>u :diffupdate<CR>
+endif
+
 "=================================================================
 " Shift-K Help support {
 "=================================================================

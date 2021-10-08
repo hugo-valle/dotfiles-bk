@@ -1,6 +1,6 @@
 "=================================================================
-"  Revision  25
-"  Modified  Thursday, 01 April 2021
+"  Revision  28
+"  Modified  Tuesday, 28 September 2021
 "=================================================================
 
 "=================================================================
@@ -21,7 +21,9 @@ endif
 call plug#begin('~/.vim/bundle')
 
 " personal configs
-source $HOME/dotfiles/vim/vim_plugs/jvim.vim
+"source $HOME/dotfiles/vim/vim_plugs/jvim.vim
+" Commenting Code
+source $HOME/dotfiles/vim/vim_plugs/vim_commentary.vim
 " Browsing, Project Explorer
 source $HOME/dotfiles/vim/vim_plugs/nerdtree.vim
 " Theme
@@ -30,8 +32,8 @@ source $HOME/dotfiles/vim/vim_plugs/color_scheme.vim
 " Source Control: git, github, etc
 source $HOME/dotfiles/vim/vim_plugs/fugitive.vim
 " Language support
-"source $HOME/dotfiles/vim/vim_plugs/language_support.vim
-"source $HOME/dotfiles/vim/vim_plugs/ale.vim
+source $HOME/dotfiles/vim/vim_plugs/language_support.vim
+source $HOME/dotfiles/vim/vim_plugs/ale.vim
 " Inteligent
 "source $HOME/dotfiles/vim/vim_plugs/coc.vim
 " File Fuzzy Finder
