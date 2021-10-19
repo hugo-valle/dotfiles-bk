@@ -146,7 +146,7 @@ int main(int argc, char* argv[])
  *  GNU General Public License as published by the Free Software Foundation.
  */
 #ifndef  |?BASENAME:U|__INC__
-#define  |BASENAME:U|__INC__
+#define  |BASENAME:U|_INC__
     <+DETAILED+><SPLIT>
 #endif /* ----- #ifndef |BASENAME:U|__INC__ ----- */
 == Comments.C file sections  == expandmenu, append, map:ccs, shortcut:s ==
