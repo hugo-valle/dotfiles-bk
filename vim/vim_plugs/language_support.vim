@@ -48,3 +48,9 @@ augroup Python
     autocmd BufNewFile *.py silent! 0r ~/.vim/templates/python_mode.template | cal cursor(8,4)
 augroup END
 "} ===
+
+"=================================================================
+" Trim whitespace
+"=================================================================
+Plug 'ntpeters/vim-better-whitespace'
+"} ===

@@ -1,6 +1,6 @@
 "=================================================================
-"  Revision  109
-"  Modified  Monday, 01 March 2021
+"  Revision  106
+"  Modified  Thursday, 01 April 2021
 "=================================================================
 
 "=================================================================
@@ -49,6 +49,10 @@ inoremap kj <Esc>
 inoremap <c-u> <ESC>viwUi
 nnoremap <c-u> viwU<Esc>
 
+" TAB in general mode will move to text buffer
+nnoremap <Leader><TAB> :bnext<CR>
+" SHIFT-TAB will go back
+nnoremap <S-TAB> :bprevious<CR>
 
 " Alternate way to save
 nnoremap <C-s> :w<CR>
@@ -102,6 +106,19 @@ nnoremap tl  :tablast<CR>
 "endif
 
 "} ===
+
+if &diff
+        " Your setting you want to set when using diff mode.
+        "nnoremap <expr> <C-J> &diff ? ']c' : '<C-W>j'
+        nnoremap <Leader>n ]c
+        nnoremap <Leader>N [c
+        " Built-in shortcut: do
+        nnoremap <Leader>] :diffget<CR>
+        " Built-in shortcut: dp
+        nnoremap <Leader>] :diffget<CR>
+        nnoremap <Leader>[ :diffput<CR>
+        nnoremap <Leader>u :diffupdate<CR>
+endif
 
 "=================================================================
 " Shift-K Help support {

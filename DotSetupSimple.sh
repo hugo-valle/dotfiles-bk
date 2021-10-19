@@ -149,7 +149,7 @@ ScriptSettings()
 #-------------------------------------------------------------------------------
 PrintHelp()
 {
-    echo "${RESET}usage: $0 [--administrator] [--remove] [--backup] [--upgrade] [--decrypt] [--encrypt]$RESET"
+    echo "${RESET}usage: $0 [--administrator] [--remove] [--backup] $RESET"
     exit 0
 }
 
@@ -196,65 +196,6 @@ Remove()
 }
 
 
-#---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  Upgrade
-#   DESCRIPTION:  Upgrade current setup after doing a git pull --upgrade
-#    PARAMETERS:  None
-#       RETURNS:  None
-#          Note:  Might just do a Plug clean install etc
-#-------------------------------------------------------------------------------
-Upgrade()
-{
-    # TODO:03/01/2019 05:41:45 PM:hvalle: Need to test this more. Do I link back?
-    unlink ~/.bash_aliases
-    unlink ~/.zsh_aliases
-    vim +PlugInstall +PlugUpdate +PlugClean +qall
-    exit 0
-}
-
-
-#---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  DecryptSecure
-#   DESCRIPTION:  Decrypt secure file NOTE Must be called after AddToEnvironment
-#    PARAMETERS:  none
-#       RETURNS:  Success(0) or none
-#-------------------------------------------------------------------------------
-DecryptSecure()
-{
-    read -n 1 -p "$BOLD${BLUE}Use secure valut?$RESET (You must have a git repository setup) (y/N): $GREEN" choice
-    echo "$RESET"
-    case "$choice" in
-        y|Y ) :;;
-        n|N|* ) return;;
-    esac
-    read -p "${RESET}Enter$BOLD$BLUE git repository of secure vault$RESET ex\"https://github.com/<user name>/secure.git\": $GREEN" REPO
-
-    (cd $DOTFILES && exec git clone $REPO)
-    (exec $DOTFILES/scripts/unlock.sh)
-    exit 0
-}
-
-
-#---  FUNCTION  ----------------------------------------------------------------
-#          NAME:  EncryptSecure
-#   DESCRIPTION:  Encrypt secure file NOTE Must be called after AddToEnvironment
-#    PARAMETERS:  none
-#       RETURNS:  Success(0) or none
-#-------------------------------------------------------------------------------
-EncryptSecure()
-{
-    read -n 1 -p "$BOLD${BLUE}Use secure valut?$RESET (You must have a git repository setup) (y/N): $GREEN" choice
-    echo "$RESET"
-    case "$choice" in
-        y|Y ) :;;
-        n|N|* ) return;;
-    esac
-
-    (exec $DOTFILES/scripts/lock.sh)
-
-    exit 0
-}
-
 
 #---  FUNCTION  ----------------------------------------------------------------
 #          NAME:  Init
@@ -277,9 +218,6 @@ Init()
             --administrator) ADMIN=1;;
             --remove) Remove;;
             --backup) Backup;;
-            --upgrade) Upgrade;;
-            --decrypt) DecryptSecure;;
-            --encrypt) EncryptSecure;;
             -h|--help|*) PrintHelp;;
         esac;
         shift;

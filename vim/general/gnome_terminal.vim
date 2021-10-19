@@ -1,6 +1,6 @@
 "=================================================================
-"  Revision  6
-"  Modified  Sunday, 28 February 2021
+"  Revision  7
+"  Modified  Tuesday, 28 September 2021
 "=================================================================
 
 "=================================================================
@@ -64,7 +64,9 @@ else
     " No truecolor welcome to bad times
     " Hope term supports 256 colors
     let g:gruvbox_italic=0
-    set term=xterm-256color
+    if has("vim")
+        set term=xterm-256color
+    endif
     set t_Co=256
     set t_ut=
 endif

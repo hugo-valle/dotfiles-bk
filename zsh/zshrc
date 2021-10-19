@@ -5,19 +5,20 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export TERM="xterm-256color"
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
+export TERM="xterm-256color"
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/hvalle/.oh-my-zsh"
+source ~/dotfiles/zsh/alias.zsh
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-#ZSH_THEME="robbyrussell"
 ZSH_THEME="powerlevel10k/powerlevel10k"
+
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -78,8 +79,8 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-#plugins=(git tmux)
-plugins=( git tmux zsh-syntax-highlighting zsh-autosuggestions )
+# Add wisely, as too many plugins slow down shell startup.
+plugins=( git zsh-syntax-highlighting zsh-autosuggestions )
 
 
 source $ZSH/oh-my-zsh.sh
@@ -109,13 +110,6 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source ~/dotfiles/zsh/alias.zsh
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
 if [ -x "$(command -v colorls)" ]; then
     alias ls="colorls"
     alias la="colorls -a"
@@ -123,3 +117,90 @@ if [ -x "$(command -v colorls)" ]; then
     alias lr="colorls --report"
     alias lt="colorls --tree"
 fi
+# Customize to your needs...
+# local libs
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/usr/lib
+export C_INCLUDE_PATH=$C_INCLUDE_PATH:~/usr/include
+export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:~/usr/include
+# Add to PATH to Install and run programs with "pip install --user"
+export PATH=$PATH:~/.local/bin
+
+NPM_PACKAGES="${HOME}/.npm"
+PATH="$NPM_PACKAGES/bin:$PATH"
+
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPS="--extended"
+
+export MARKER_KEY_NEXT_PLACEHOLDER="\C-b"   #change maker key binding from Ctr+t to Ctr+b
+
+[[ -s "$HOME/.local/share/marker/marker.sh" ]] && source "$HOME/.local/share/marker/marker.sh"
+
+export PATH=$PATH:~/.quickzsh/todo/bin    #usig alias doesn't properly work
+
+autoload -U compinit && compinit        # zsh-completions
+
+alias myip="wget -qO- https://wtfismyip.com/text"	# quickly show external ip address
+alias x="exit"
+alias k="k -h"						# show human readable filesizes, in kb, mb etc
+
+
+# CUSTOM FUNCTIONS
+
+# cheat sheets (github.com/chubin/cheat.sh), find out how to use commands
+# example 'cheat tar'
+# for language specific question supply 2 args first for language, second as the question
+# eample: cheat python3 execute external program
+cheat() {
+    if [ "$2" ]; then
+        curl "https://cheat.sh/$1/$2+$3+$4+$5+$6+$7+$8+$9+$10"
+    else
+        curl "https://cheat.sh/$1"
+    fi
+}
+
+# Matrix screen saver! will run if you have installed "cmatrix"
+# TMOUT=900
+# TRAPALRM() { if command -v cmatrix &> /dev/null; then cmatrix -sb; fi }
+
+speedtest() {
+    curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -
+}
+
+dadjoke() {
+    curl https://icanhazdadjoke.com
+}
+
+# Find dictionary definition
+dict() {
+    if [ "$3" ]; then
+        curl "dict://dict.org/d:$1 $2 $3"
+    elif [ "$2" ]; then
+        curl "dict://dict.org/d:$1 $2"
+    else
+        curl "dict://dict.org/d:$1"
+    fi
+}
+
+# Find geo info from IP
+ipgeo() {
+    # Specify ip or your ip will be used
+    if [ "$1" ]; then
+        curl "http://api.db-ip.com/v2/free/$1"
+    else
+        curl "http://api.db-ip.com/v2/free/$(myip)"
+    fi
+}
+
+# Show covid-19 spread stats
+corona() {
+    # Specify country otherwise shows stats for all
+    if [ "$1" ]; then
+        curl "https://corona-stats.online/$1"
+    else
+        curl "https://corona-stats.online"
+    fi
+}

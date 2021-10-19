@@ -6,7 +6,6 @@
 "=================================================================
 " Airline Status Line and TmuxLine {
 "=================================================================
-
 Plug 'tpope/vim-fugitive'
 "Plug 'vim-airline/vim-airline'
 "Plug 'vim-airline/vim-airline-themes'   "Lots of themes
