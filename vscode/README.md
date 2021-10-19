@@ -1,0 +1,1 @@
+## Sample configurations for C-C++ projects
