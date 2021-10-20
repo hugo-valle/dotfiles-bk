@@ -130,3 +130,8 @@ augroup shift-K
     autocmd FileType c set keywordprg=man\ -S3
 augroup END
 "} ===
+nnoremap < silent > <leader> 0 : source ~/ .vimrc \| :PlugInstall<CR>
+" TAB in general mode will move to text buffer
+nnoremap <TAB> :bnext<CR>
+" SHIFT-TAB will go back
+nnoremap <S-TAB> :bprevious<CR>

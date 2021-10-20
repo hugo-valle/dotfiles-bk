@@ -1,6 +1,6 @@
 "=================================================================
-"  Revision  28
-"  Modified  Tuesday, 28 September 2021
+"  Revision  36
+"  Modified  Tuesday, 05 October 2021
 "=================================================================
 
 "=================================================================
@@ -21,24 +21,25 @@ endif
 call plug#begin('~/.vim/bundle')
 
 " personal configs
-"source $HOME/dotfiles/vim/vim_plugs/jvim.vim
-" Commenting Code
-source $HOME/dotfiles/vim/vim_plugs/vim_commentary.vim
+source $HOME/dotfiles/vim/vim_plugs/jvim.vim
 " Browsing, Project Explorer
 source $HOME/dotfiles/vim/vim_plugs/nerdtree.vim
+" Fuzzy Finder
+source $HOME/dotfiles/vim/vim_plugs/fzf.vim
+source $HOME/dotfiles/vim/vim_plugs/startify.vim
 " Theme
 source $HOME/dotfiles/vim/vim_plugs/color_scheme.vim
-"source $HOME/dotfiles/vim/vim_plugs/airline.vim
+" Airline theme
+source $HOME/dotfiles/vim/vim_plugs/airline.vim
 " Source Control: git, github, etc
 source $HOME/dotfiles/vim/vim_plugs/fugitive.vim
-" Language support
-source $HOME/dotfiles/vim/vim_plugs/language_support.vim
+" Tmux support
+source $HOME/dotfiles/vim/vim_plugs/vim-tmux.vim
+" Syntax and Language support
 source $HOME/dotfiles/vim/vim_plugs/ale.vim
-" Inteligent
+source $HOME/dotfiles/vim/vim_plugs/bash_support.vim
+"source $HOME/dotfiles/vim/vim_plugs/language_support.vim
 "source $HOME/dotfiles/vim/vim_plugs/coc.vim
-" File Fuzzy Finder
-"source $HOME/dotfiles/vim/vim_plugs/fzf.vim
-
 
 "} ===
 
@@ -116,7 +117,6 @@ source $HOME/dotfiles/vim/vim_plugs/ale.vim
 "} ===
 
 
-
 "=================================================================
 " Code Snippets {
 "=================================================================
@@ -135,6 +135,30 @@ source $HOME/dotfiles/vim/vim_plugs/ale.vim
 "} ===
 
 
+"=================================================================
+" File search
+"=================================================================
+"
+"Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all'  }
+"Plug 'junegunn/fzf.vim'
+"nnoremap <C-p> :FZF<CR>
+"let g:fzf_action = {
+"  \ 'ctrl-t': 'tab split',
+"  \ 'ctrl-s': 'split',
+"  \ 'ctrl-v': 'vsplit'
+"  \}
+" requires silversearcher-ag
+" used to ignore gitignore files
+" let $FZF_DEFAULT_COMMAND = 'ag -g ""'
+"} ===
+
+"=================================================================
+" COC Setup: Needs Vim 8.02 or higher
+"=================================================================
+
+"
+"Plug 'neoclide/coc.nvim', {'branch': 'release'}
+"let g:coc_global_extensions = ['coc-emmet', 'coc-css', 'coc-html', 'coc-json', 'coc-prettier', 'coc-tsserver']
 "=================================================================
 " Startify: The fancy start screen for vim {
 "=================================================================

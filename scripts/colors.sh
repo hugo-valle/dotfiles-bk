@@ -3,9 +3,9 @@
 #          FILE  colors.sh
 #         USAGE  ./colors.sh
 #
-#        AUTHOR  John Warnes (), johnwarnes@mail.weber.edu
-#      Revision  014
-#      Modified  Sunday, 12 November 2017
+#        AUTHOR  Hugo valle
+#      Revision  015
+#      Modified  Monday, 11 October 2021
 #=================================================================
 
 set -o nounset                  # Treat unset variables as an error

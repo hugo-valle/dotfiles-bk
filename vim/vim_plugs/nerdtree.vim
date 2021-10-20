@@ -1,12 +1,11 @@
 "=================================================================
-"  Revision  30
-"  Modified  Wednesday, 21 April 2021
+"  Revision  33
+"  Modified  Tuesday, 09 March 2021
 "=================================================================
 
 "=================================================================
 " NerdTree [Ctrl-B] {
 "=================================================================
-" Plug 'preservim/nerdtree'
  Plug 'preservim/nerdtree' |
              \ Plug 'Xuyuanp/nerdtree-git-plugin' |
              \ Plug 'ryanoasis/vim-devicons'
@@ -35,12 +34,15 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
             \ 'Unknown'   : '?'
             \ }
 " Open the existing NERDTree on each new tab.
-" autocmd BufWinEnter * silent NERDTreeMirror
+"autocmd BufWinEnter * silent NERDTreeMirror
+
 " Start NERDTree. If a file is specified, move the cursor to its window.
 "autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
-" Automaticaly close nvim if NERDTree is only thing left open
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Exit Vim if NERDTree is the only window left.
+"autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
+"    \ quit | endif
 
 "} ===
 
