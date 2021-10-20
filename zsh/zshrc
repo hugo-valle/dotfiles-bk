@@ -142,6 +142,9 @@ alias myip="wget -qO- https://wtfismyip.com/text"	# quickly show external ip add
 alias x="exit"
 alias k="k -h"						# show human readable filesizes, in kb, mb etc
 
+export PATH=$PATH:~/.quickzsh/todo/bin    #usig alias doesn't properly work
+
+export PATH=$PATH:~/.config/coc/extensions/coc-clangd-data/install/12.0.1/clangd_12.0.1/bin  
 
 # CUSTOM FUNCTIONS
 

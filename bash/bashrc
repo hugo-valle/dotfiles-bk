@@ -111,3 +111,5 @@ export MPICC='/opt/local/bin/mpicc-mpich-mp'
 export MPIRUN='/opt/local/bin/mpirun-mpich-mp'
 export MPI_HOST='hostfile'
 export PATH="/usr/local/ssl/bin:$PATH"
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
