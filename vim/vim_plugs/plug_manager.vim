@@ -1,6 +1,6 @@
 "=================================================================
-"  Revision  36
-"  Modified  Tuesday, 05 October 2021
+"  Revision  38
+"  Modified  Wednesday, 20 October 2021
 "=================================================================
 
 "=================================================================
@@ -41,6 +41,8 @@ source $HOME/dotfiles/vim/vim_plugs/bash_support.vim
 "source $HOME/dotfiles/vim/vim_plugs/language_support.vim
 "source $HOME/dotfiles/vim/vim_plugs/coc.vim
 
+Plug 'tibabit/vim-templates'
+let g:tmpl_author_email = 'john.doe@example.com'
 "} ===
 
 "=================================================================
