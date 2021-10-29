@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+# @author      : {{NAME}} ({{EMAIL}})
+# @created     : {{TODAY}}
+# @filename    : {{FILEE}}
+#
+""" Module Documentation
+"""
+
+
+def main():
+    """Main Driver
+    """
+    pass
+
+
+if __name__ == '__main__':
+    main()

@@ -1,10 +1,10 @@
 "=================================================================
-"  Revision  6
-"  Modified  Thursday, 01 April 2021
+"  Revision  7
+"  Modified  Friday, 29 October 2021
 "=================================================================
 
 " Stable version of coc
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
