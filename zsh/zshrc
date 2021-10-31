@@ -10,7 +10,20 @@ fi
 
 export TERM="xterm-256color"
 # Path to your oh-my-zsh installation.
-export ZSH="/home/hvalle/.oh-my-zsh"
+case `uname` in
+  Darwin)
+    # commands for OS X go here
+    export LD_LIBRARY_PATH="/Library/Developer/CommandLineTools/usr/lib/:$LD_LIBRARY_PATH"
+    export ZSH="/Users/hvalle/.oh-my-zsh"
+  ;;
+  Linux)
+    # commands for Linux go here
+    export ZSH="/home/hvalle/.oh-my-zsh"
+  ;;
+  FreeBSD)
+    # commands for FreeBSD go here
+  ;;
+esac
 source ~/dotfiles/zsh/alias.zsh
 
 # Set name of the theme to load --- if set to "random", it will
@@ -120,6 +133,7 @@ fi
 # Customize to your needs...
 # local libs
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:~/usr/lib
+
 export C_INCLUDE_PATH=$C_INCLUDE_PATH:~/usr/include
 export CPLUS_INCLUDE_PATH=$CPLUS_INCLUDE_PATH:~/usr/include
 # Add to PATH to Install and run programs with "pip install --user"

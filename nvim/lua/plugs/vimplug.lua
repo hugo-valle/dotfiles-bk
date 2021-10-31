@@ -1,3 +1,8 @@
+-- Make sure Plug is install
+vim.cmd [[
+    source ~/.config/nvim/vim_plugs/plug_manager.vim
+]]
+
 local configs = {
   lazy = {},
   start = {}
