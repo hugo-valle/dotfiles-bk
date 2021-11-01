@@ -1,9 +1,26 @@
 {
+    "initializationOptions": {
+        // This will re-index the file on buffer change which is definitely a performance hit. See if it works for you
+        "index": {
+            "onChange": true
+        },
+        // This is mandatory!
+        "highlight": { "lsRanges" : true }
+    },
     "languageserver": {
-        "clangd": {
-            "command": "clangd",
-            "rootPatterns": ["compile_flags.txt", "compile_commands.json"],
-            "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"]
+        "ccls": {
+            "command": "ccls",
+            "args": ["--log-file=/tmp/ccls.log", "-v=1"],
+            "filetypes": ["c", "cc", "cpp", "c++", "objc", "objcpp"],
+            "rootPatterns": [".ccls", "compile_commands.json"],
+            "initializationOptions": {
+                "cache": {
+                    "directory": "/tmp/ccls"
+                },
+                "client": {
+                    "snippetSupport": true
+                }
+            }
         },
         "cmake": {
             "command": "cmake-language-server",

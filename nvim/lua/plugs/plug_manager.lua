@@ -9,6 +9,7 @@ require('plugs.lualine')    -- status line
 require('plugs.colors')     -- theme
 require('plugs.fugitive')   -- git support
 require('plugs.coc')        -- language support
+require('plugs.ale')        -- code linting
 require('plugs.telescope')  -- fuzzy finder
 require('plugs.templates')  -- file templates
 

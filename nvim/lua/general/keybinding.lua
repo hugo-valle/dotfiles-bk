@@ -74,3 +74,5 @@ map('n', '<Leader>ff', "<cmd>lua require('telescope.builtin').find_files()<cr>")
 map('n', '<Leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<cr>")
 map('n', '<Leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>")
 map('n', '<Leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>")
+-- Formating
+map('n', '<Leader>r', ':<C-u>ClangFormat<CR>')
