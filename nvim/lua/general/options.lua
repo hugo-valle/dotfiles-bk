@@ -56,7 +56,7 @@ vim.o.softtabstop     = indent
 vim.o.shiftwidth      = indent
 vim.o.scrolloff       = 12  	  -- Vertical Scroll Offset
 vim.o.sidescrolloff   = 8  	    -- Horizontal Scroll Offset
-vim.o.mouse           = 'a'	    -- Enable mouse mode
+vim.opt.mouse         = 'a'	    -- Enable mouse mode
 
 -- Vim specific
 vim.o.hidden          = true	    -- Do not save when switching buffers

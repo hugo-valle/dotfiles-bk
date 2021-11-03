@@ -11,10 +11,14 @@ require('plugs.fugitive')   -- git support
 require('plugs.coc')        -- language support
 require('plugs.ale')        -- code linting
 require('plugs.telescope')  -- fuzzy finder
+require('plugs.treesitter') -- treesitter parser
 require('plugs.templates')  -- file templates
+require('plugs.vim-tmux')   -- tmux for vim
 
 -- End Pluggins
 Plug.ends()
 
-require'lualine'.setup {options = {theme = wombat}}
+require'lualine'.setup {
+  options = { theme = wombat }
+}
 vim.cmd 'colorscheme duskfox'
