@@ -11,3 +11,7 @@ vim/templates/personal.template
 # ignore vim undo folder
 vim/undo/*
 vim/undodir/*
+
+nvim/undodir/*
+nvim/plugged/*
+nvim/autoload/*

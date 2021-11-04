@@ -31,22 +31,3 @@ hi FloatermBorder guibg=none guifg=none
 highlight VertSplit guibg=NONE
 ]]
 ,true)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

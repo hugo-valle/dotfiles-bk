@@ -122,6 +122,8 @@ ScriptSettings()
     OPTPKGS='neovim python3-neovim nodejs npm tree clang cppcheck libxml2-utils lua-check jsonlint pylint python3-pip python3-doc ctags cppman libbz2-dev bats ruby ruby-dev zlib1g-dev pkg-config libglib2.0-dev binutils-dev autoconf libtool libssl-dev libpixman-1-dev virtualenv fontconfig'
     PIPPKGS='vim-vint proselint sphinx virtualenvwrapper numpy pandas'
     PKGS='git wget vim python3 curl bc build-essential cmake libboost-all-dev doxygen '
+    # TODO: packages needed for LSP coc: clang-format, llvm, clagd-12, fg,
+    # ripgrep
 
     # Note these two arrays must match by index number
     FILES=($DOTFILES/vim/vimrc 
