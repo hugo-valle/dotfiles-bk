@@ -43,6 +43,8 @@ return require('packer').startup(function()
   use {'tibabit/vim-templates'}
   -- Tmux
   use {'christoomey/vim-tmux-navigator'}
+  -- vimclang
+  use {'rhysd/vim-clang-format'}
 
   use {'voldikss/vim-floaterm'}
   use {'ggandor/lightspeed.nvim'}

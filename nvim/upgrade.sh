@@ -3,6 +3,7 @@
 set -e
 
 system_type=$(uname -s)
+# MacOS setup
 if [ "$system_type" = "Darwin" ]; then
   brew install shellcheck
   brew install shfmt
@@ -11,10 +12,13 @@ if [ "$system_type" = "Darwin" ]; then
 
   curl -L https://github.com/rust-analyzer/rust-analyzer/releases/download/nightly/rust-analyzer-mac.gz | gunzip -f > "$HOME"/.local/bin/rust-analyzer && chmod +x "$HOME"/.local/bin/rust-analyzer
 
-else
-  sudo apt-get install -y\
+else # Ubuntu
+  sudo apt  install -y\
     shellcheck \
     clang-tools \
+    golang \
+    clang-format \
+    clangd\
     ;
 
   curl -L https://github.com/rust-analyzer/rust-analyzer/releases/download/nightly/rust-analyzer-linux.gz | gunzip -f > "$HOME"/.local/bin/rust-analyzer && chmod +x "$HOME"/.local/bin/rust-analyzer
@@ -27,12 +31,14 @@ sudo npm install -g -f \
   prettier-plugin-toml \
   markdownlint \
   diagnostic-languageserver \
-  typescript typescript-language-server \
+  bash-language-server\
+  typescript\
+  typescript-language-server \
   dockerfile-language-server-nodejs \
   ;
 
-pip install --upgrade \
+pip3 install --upgrade \
   cmake-language-server \
   ;
 
-GO111MODULE=on go install golang.org/x/tools/gopls@latest
+GO111MODULE=on go get golang.org/x/tools/gopls@latest

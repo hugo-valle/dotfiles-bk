@@ -71,7 +71,7 @@ opt.scrolloff       = 12  	  -- Vertical Scroll Offset
 opt.sidescrolloff   = 8  	    -- Horizontal Scroll Offset
 
 -- remove whitespace on save
-cmd [[au BufWritePre * :%s/\s\+$//e]]
+--cmd [[au BufWritePre * :%s/\s\+$//e]]
 
 
 -- highlight on yank
