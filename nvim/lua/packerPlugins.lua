@@ -8,52 +8,69 @@ end
 return require('packer').startup(function()
   -- Packer can manage itself
   --comment for neovim
-  use {"terrortylor/nvim-comment"}
+  --use {"terrortylor/nvim-comment"}
+  use {"tpope/vim-commentary"}
 
-  use {'wbthomason/packer.nvim', opt=true}
+  use {
+  'wbthomason/packer.nvim', opt = true}
   --nvim tree for file explorer
-  use {'kyazdani42/nvim-tree.lua'}
+  use {
+  'kyazdani42/nvim-tree.lua'}
   --indentLine
-  use {'Yggdroot/indentLine'}
+  use {
+  'Yggdroot/indentLine'}
   --autopairs
   use {'windwp/nvim-autopairs'}
   use {'kyazdani42/nvim-web-devicons'}
   use {'liuchengxu/vista.vim'}
   use {'nvim-treesitter/nvim-treesitter'}
-  use {'navarasu/onedark.nvim'}
+  use {
+  'navarasu/onedark.nvim'}
   --vsnip for snippets
   use {'hrsh7th/cmp-vsnip'}
   use {'hrsh7th/vim-vsnip'}
   use {'onsails/lspkind-nvim'}
 
-  use { 'nvim-lualine/lualine.nvim',
-      requires = {'kyazdani42/nvim-web-devicons', opt = true} }
+  use {
+  'nvim-lualine/lualine.nvim', requires = {
+    'kyazdani42/nvim-web-devicons',
+    opt = true
+  } }
 
   use {
-    'nvim-telescope/telescope.nvim',
-    requires = { {'nvim-lua/plenary.nvim'} }
+  'nvim-telescope/telescope.nvim', requires = { {'nvim-lua/plenary.nvim'} }
   }
   use {
-    'romgrk/barbar.nvim',
-    requires = {'kyazdani42/nvim-web-devicons'}
+  'romgrk/barbar.nvim', requires = { 'kyazdani42/nvim-web-devicons' }
   }
   -- linter
-  use {'dense-analysis/ale'}
+  use {
+  'dense-analysis/ale'}
+  -- ctags
+  use {
+  'ludovicchabant/vim-gutentags'}
   -- Templates
-  use {'tibabit/vim-templates'}
+  use {
+  'tibabit/vim-templates'}
   -- Tmux
-  use {'christoomey/vim-tmux-navigator'}
+  use {
+  'christoomey/vim-tmux-navigator'}
   -- vimclang
   use {'rhysd/vim-clang-format'}
 
   use {'voldikss/vim-floaterm'}
   use {'ggandor/lightspeed.nvim'}
-  use {'xiyaowong/nvim-transparent'}
+  use {
+  'xiyaowong/nvim-transparent'}
   --this is for the lsp
   use {
       'neovim/nvim-lspconfig',
       'williamboman/nvim-lsp-installer',
   }
+  use {"nvim-lua/completion-nvim"}
+  use {"nvim-lua/diagnostic-nvim"}
+  use {"9mm/vim-closer"}
+
   use {"folke/which-key.nvim"}
   use { 'hrsh7th/nvim-cmp',
     requires = {
