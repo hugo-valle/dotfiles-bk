@@ -90,3 +90,5 @@ map('n', '<Leader>fb', "<cmd>lua require('telescope.builtin').buffers()<cr>")
 map('n', '<Leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>")
 -- Formating
 map('n', '<Leader>r', ':<C-u>ClangFormat<CR>')
+-- Telescope
+map('n', '<Leader>vrc', "<cmd>lua require('plugins.telescope').search_dotfiles()<cr>")

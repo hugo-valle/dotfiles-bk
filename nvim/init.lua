@@ -19,6 +19,7 @@ require('plugins/lspkind')
 require('plugins/vsnip')
 require('plugins/ale')
 require('plugins/vim-templates')
+require('plugins/telescope')
 
 g.onedark_style = 'darker'
 vim.api.nvim_command('set timeoutlen=100 ttimeoutlen=0')
