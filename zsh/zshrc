@@ -221,3 +221,5 @@ corona() {
         curl "https://corona-stats.online"
     fi
 }
+
+alias luamake=/home/hvalle/dotfiles/nvim/lua-language-server/3rd/luamake/luamake
