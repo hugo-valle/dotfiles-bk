@@ -78,7 +78,7 @@ map('n', 'tl', '<Esc>:tablast<CR>')   -- last tab
 
 -- nvim-tree
 map('n', '<leader>e', ':NvimTreeToggle<CR>', default_opts)       -- open/close
-map('n', '<leader>rf', ':NvimTreeRefresh<CR>', default_opts)  -- refresh
+map('n', '<leader>re', ':NvimTreeRefresh<CR>', default_opts)  -- refresh
 --map('n', '<leader>n', ':NvimTreeFindFile<CR>', default_opts) -- search file
 
 -- Vista tag-viewer
@@ -113,7 +113,7 @@ map('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', default_opts)
 map('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', default_opts)
 map('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', default_opts)
 map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', default_opts)
-map('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', default_opts)
+--map('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', default_opts)
 map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', default_opts)
 map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', default_opts)
 map('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', default_opts)
