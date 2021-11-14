@@ -17,7 +17,8 @@ return require('packer').startup(function()
   --indentLine
   use {'Yggdroot/indentLine'}
   --autopairs
-  use {'windwp/nvim-autopairs'}
+  -- use {'windwp/nvim-autopairs'}
+  use {'jiangmiao/auto-pairs'}
   use {'kyazdani42/nvim-web-devicons'}
   use {'liuchengxu/vista.vim'}
   use {'nvim-treesitter/nvim-treesitter'}
@@ -45,6 +46,8 @@ return require('packer').startup(function()
   -- Tmux
   use {'christoomey/vim-tmux-navigator'}
   -- vimclang
+  use {'WolfgangMehner/c-support'}
+  vim.g['C_UseTool_doxygen'] = 'yes'
   use {'rhysd/vim-clang-format'}
   use {'cdelledonne/vim-cmake'}  -- cmake support
   use {'alepez/vim-gtest'}       -- gtest support
