@@ -18,6 +18,7 @@ else # Ubuntu
     clang-tools \
     golang \
     clang-format \
+    ctags\
     clangd\
     ;
 

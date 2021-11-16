@@ -33,15 +33,15 @@ map('i', 'kk', '<Esc>', {noremap = true})
 -- don't use arrow keys
 
 -- fast saving with <leader> and s
-map('n', '<leader>w', ':w<CR>', default_opts)
+--map('n', '<leader>w', '<C-c>:w<CR>', default_opts)
 map('n', '<leader>x', '<C-c>:wq<CR>', default_opts)
 map('n', '<leader>so', '<C-c>:source %<CR>', default_opts)
 
 -- move around splits using Ctrl + {h,j,k,l}
-map('n', '<C-h>', '<C-w>h', default_opts)
-map('n', '<C-j>', '<C-w>j', default_opts)
-map('n', '<C-k>', '<C-w>k', default_opts)
-map('n', '<C-l>', '<C-w>l', default_opts)
+--map('n', '<C-h>', '<C-w>h', default_opts)
+--map('n', '<C-j>', '<C-w>j', default_opts)
+--map('n', '<C-k>', '<C-w>k', default_opts)
+--map('n', '<C-l>', '<C-w>l', default_opts)
 -- Use alt + hjkl to resize windows
 map('n', '<M-j>', ':resize -2<CR>')
 map('n', '<M-k>', ':resize +2<CR>')
@@ -116,5 +116,5 @@ map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', default_opts)
 --map('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', default_opts)
 map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', default_opts)
 map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', default_opts)
-map('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', default_opts)
-map('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', default_opts)
+--map('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', default_opts)
+map('n', '<space>fo', '<cmd>lua vim.lsp.buf.formatting()<CR>', default_opts)
