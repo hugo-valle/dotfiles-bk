@@ -27,8 +27,6 @@ map('i', 'jk', '<Esc>', {noremap = true})
 map('i', 'kj', '<Esc>', {noremap = true})
 map('i', 'jj', '<Esc>', {noremap = true})
 map('i', 'kk', '<Esc>', {noremap = true})
---map('i', '<C-c>', '<Esc>', {noremap = true})
---map('n', '<C-c>', '<Esc>', {noremap = true})
 
 -- don't use arrow keys
 
@@ -57,15 +55,6 @@ map('n', '<S-TAB>', ':bprevious<CR>')     -- Previous buffer
 -- Easier moving between tabs
 map('n', '<Leader>m', '<Esc>:tabprevious<CR>')
 map('n', '<Leader>n', '<Esc>:tabnext<CR>')
---map('n', '<Leader>1', '1gt')
---map('n', '<Leader>2', '2gt')
---map('n', '<Leader>3', '3gt')
---map('n', '<Leader>4', '4gt')
---map('n', '<Leader>5', '5gt')
---map('n', '<Leader>6', '6gt')
---map('n', '<Leader>7', '7gt')
---map('n', '<Leader>8', '8gt')
---map('n', '<Leader>9', '9gt')
 map('n', 'th', '<Esc>:tabfirst<CR>')  -- first tab
 map('n', 'tk', '<Esc>:tabnext<CR>')   -- right tab
 map('n', 'tj', '<Esc>:tabprev<CR>')   -- left tab
