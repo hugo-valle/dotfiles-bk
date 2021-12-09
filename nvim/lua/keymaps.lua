@@ -20,7 +20,7 @@ local cmd = vim.cmd
 -----------------------------------------------------------
 
 -- clear search highlighting
-map('n', '<CR>', ':noh<CR><CR>', {noremap = true}) -- clears search highlight & still be enter
+map('n', '<leader><CR>', ':noh<CR><CR>', {noremap = true}) -- clears search highlight & still be enter
 
 -- map Esc to kk
 map('i', 'jk', '<Esc>', {noremap = true})
@@ -80,7 +80,7 @@ map('n', '<Leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<cr>")
 map('n', '<Leader>vrc', "<cmd>lua require('plugins.telescope').search_dotfiles()<cr>")
 -- Formating
 map('n', '<Leader>r', ':<C-u>ClangFormat<CR>')
--- CMake ang GoogleTest
+-- CMake and GoogleTest
 map('n', '<Leader>cc', ':CMakeClean<CR>', default_opts)  -- Clean
 map('n', '<Leader>ci', ':CMakeInstall<CR>', default_opts)  -- Install
 map('n', '<Leader>cg', ':CMakeGenerate<CR>', default_opts)  -- Generate
