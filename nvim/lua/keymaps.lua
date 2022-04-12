@@ -49,7 +49,7 @@ map('n', '<M-h>', ':vertical resize -2<CR>')
 map('n', '<M-l>', ':vertical resize +2<CR>')
 
 -- close all windows and exit from neovim
-map('n', '<leader>q', ':quitall<CR>', default_opts)
+--map('n', '<leader>q', ':quitall<CR>', default_opts)
 
 -- Easier moving between buffers
 map('n', '<Leader><TAB>', ':bnext<CR>')   -- Next buffer

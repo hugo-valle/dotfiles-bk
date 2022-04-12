@@ -89,4 +89,6 @@ return require('packer').startup(function()
   use {'tpope/vim-fugitive'}
   -- ---> git changes on the gutter <---
   use {'airblade/vim-gitgutter'}
+  -- ---> autopilot <---
+  use {'github/copilot.vim'}
 end)
