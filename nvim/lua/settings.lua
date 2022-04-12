@@ -46,8 +46,7 @@ g.onedark_style = 'darker'
 -----------------------------------------------------------
 opt.number = true             -- show line number
 opt.showmatch = true          -- highlight matching parenthesis
-opt.foldmethod = 'marker'     -- enable folding (default 'foldmarker')
-opt.colorcolumn = '80'        -- line lenght marker at 80 columns
+opt.foldmethod = 'syntax'     -- enable folding (default 'foldmarker')
 opt.splitright = true         -- vertical split to the right
 opt.splitbelow      = true 	-- Force Split Below
 opt.ignorecase = true         -- ignore case letters when search

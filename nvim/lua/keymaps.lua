@@ -27,8 +27,6 @@ map('i', 'jk', '<Esc>', {noremap = true})
 map('i', 'kj', '<Esc>', {noremap = true})
 map('i', 'jj', '<Esc>', {noremap = true})
 map('i', 'kk', '<Esc>', {noremap = true})
---map('i', '<C-c>', '<Esc>', {noremap = true})
---map('n', '<C-c>', '<Esc>', {noremap = true})
 
 -- don't use arrow keys
 
